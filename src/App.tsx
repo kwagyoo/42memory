@@ -3,6 +3,7 @@ import LoginPage from "./pages/LoginPage";
 import WallpaperImg from "./image/WallpaperImg.jpg";
 import styled from "styled-components";
 import { Route, Routes } from "react-router";
+import Header from "./common/Header";
 
 const BackgroundDiv = styled.div`
   background-image: url(${WallpaperImg});
@@ -12,9 +13,10 @@ const BackgroundDiv = styled.div`
   }
 `;
 
-const App: React.FC = () => {
+const App: React.VFC = () => {
   return (
     <BackgroundDiv>
+      <Header />
       <Routes>
         <Route path="/" element={<LoginPage />} />
       </Routes>
