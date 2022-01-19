@@ -1,9 +1,9 @@
-import React from "react";
-import LoginPage from "./pages/LoginPage";
-import WallpaperImg from "./image/WallpaperImg.jpg";
-import styled from "styled-components";
-import { Route, Routes } from "react-router";
-import Header from "./common/Header";
+import React from 'react';
+import LoginPage from './pages/LoginPage';
+import WallpaperImg from './image/WallpaperImg.jpg';
+import styled from 'styled-components';
+import { Route, Routes } from 'react-router';
+import Header from './common/Header';
 
 const BackgroundDiv = styled.div`
   background-image: url(${WallpaperImg});

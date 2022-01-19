@@ -1,6 +1,6 @@
-import { Form, Image } from "react-bootstrap";
-import styled from "styled-components";
-import image42 from "../image/42memory_title.png";
+import { Form, Image } from 'react-bootstrap';
+import styled from 'styled-components';
+import image42 from '../image/42memory_title.png';
 
 const LoginDiv = styled.div`
   position: absolute;
@@ -41,20 +41,10 @@ const LoginPage: React.FC = () => {
         </div>
         <CustomForm className="row g-3">
           <div className="col-md-12 col-lg-12">
-            <Form.Control
-              type="email"
-              className="form-control"
-              id="inputEmail4"
-              placeholder="아이디를 입력해주세요"
-            />
+            <Form.Control type="email" className="form-control" id="inputEmail4" placeholder="아이디를 입력해주세요" />
           </div>
           <div className="col-md-12 col-lg-12">
-            <Form.Control
-              type="password"
-              className="form-control"
-              id="inputPassword4"
-              placeholder="비밀번호를 입력해주세요"
-            />
+            <Form.Control type="password" className="form-control" id="inputPassword4" placeholder="비밀번호를 입력해주세요" />
           </div>
         </CustomForm>
       </div>

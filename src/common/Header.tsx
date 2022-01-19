@@ -7,36 +7,40 @@ import copyimg from '../image/42memory_copy.png';
 const StyledDropdown = styled.div`
   height: 100%;
   flex: 0 0 64px;
-  .dropdown {
-    display: flex;
-    justify-content: center;
-  }
-  .btn {
-    width: 90%;
-    padding: 0.1rem;
-  }
-  .dropdown,
-  .btn,
-  img {
-    background-color: transparent;
-    height: 95%;
-    border: none;
-    padding-bottom: 0.12rem;
-    vertical-align: baseline;
-  }
-  button:focus {
-    background-color: transparent;
+  * {
     border: none;
     outline: none !important;
     box-shadow: none !important;
   }
-  .open > .dropdown-toggle {
-    background-color: transparent !important;
-    outline: 0 !important;
-    border: none !important;
+
+  &:hover {
+    background-color: gray !important;
   }
-  .dropdown-toggle::after {
-    display: none;
+
+  .dropdown {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+
+    .btn {
+      width: 90%;
+      padding: 0.1rem;
+      border-radius: 0;
+    }
+    .btn-primary.dropdown-toggle {
+      background-color: transparent !important;
+    }
+    .dropdown-toggle::after {
+      display: none;
+    }
+  }
+  img {
+    background-color: transparent;
+    width: 20px;
+    height: 20px;
+    border: none;
+    vertical-align: baseline;
   }
 `;
 
