@@ -101,7 +101,7 @@ const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: Directory
               setVisible(false);
             }}
           />
-          <div className="directory-header-title">헤더</div>
+          <div className="directory-header-title">Messages</div>
         </div>
         <img src={titleimg} alt="titleimg" className="title-option-image"></img>
       </div>
