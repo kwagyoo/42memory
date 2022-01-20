@@ -23,6 +23,20 @@ const LoginDiv = styled.div`
     width: 100%;
     height: 100%;
   }
+  .login-addtional {
+    display: flex;
+    flex-direction: column;
+    .login-additional-btn {
+      font-size: 15px;
+      background-color: transparent;
+      border: none;
+      margin: 5px 0;
+      color: #d3dde1;
+    }
+    .login-additional-btn:hover {
+      color: #9f9f9f;
+    }
+  }
 `;
 
 const CustomForm = styled(Form)`
@@ -30,6 +44,22 @@ const CustomForm = styled(Form)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  .form-control {
+    padding-left: 1rem;
+    border-radius: 19px;
+    background: linear-gradient(to left, #65686b, #878b8e, #848588);
+    color: #e7e7e7;
+    font-weight: bold;
+    &::placeholder {
+      color: #bcbec1;
+    }
+    &,
+    * {
+      border: none;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
 `;
 
 const LoginPage: React.FC = () => {
@@ -41,12 +71,16 @@ const LoginPage: React.FC = () => {
         </div>
         <CustomForm className="row g-3">
           <div className="col-md-12 col-lg-12">
-            <Form.Control type="email" className="form-control" id="inputEmail4" placeholder="아이디를 입력해주세요" />
+            <Form.Control type="email" className="form-control" id="inputId" placeholder="아이디를 입력" />
           </div>
           <div className="col-md-12 col-lg-12">
-            <Form.Control type="password" className="form-control" id="inputPassword4" placeholder="비밀번호를 입력해주세요" />
+            <Form.Control type="password" className="form-control" id="inputPassword" placeholder="암호 입력" />
           </div>
         </CustomForm>
+        <div className="login-addtional">
+          <button className="login-additional-btn">회원가입</button>
+          <button className="login-additional-btn">비밀번호를 잊으셨나요?</button>
+        </div>
       </div>
     </LoginDiv>
   );

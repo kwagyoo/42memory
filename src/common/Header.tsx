@@ -70,6 +70,8 @@ const StyledHeader = styled.div`
         height: 15px;
         margin-right: 5px;
       }
+      font-size: 18px;
+      color: white;
       background-color: transparent;
       border: none;
     }
