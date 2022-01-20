@@ -14,8 +14,6 @@ const StyledDropdown = styled.div`
   flex: 1 0 33%;
 
   * {
-    border: none;
-    outline: none !important;
     box-shadow: none !important;
   }
 
@@ -42,6 +40,9 @@ const StyledDropdown = styled.div`
     }
     .dropdown-toggle::after {
       display: none;
+    }
+    .dropdown-menu {
+      border-radius: 0 0 8px 8px;
     }
   }
   img {

@@ -55,8 +55,6 @@ const CustomForm = styled(Form)`
     }
     &,
     * {
-      border: none;
-      outline: none !important;
       box-shadow: none !important;
     }
   }

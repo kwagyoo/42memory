@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import sideimg from '../image/42memory_folder_side.png';
 import titleimg from '../image/42memory_folder_title_option.png';
 import fileimg from '../image/42memory_file.png';
+import ButtonList from '../common/ButtonList';
 const StyledDirectory = styled.div`
   position: absolute;
   left: 100px;
@@ -18,6 +19,18 @@ const StyledDirectory = styled.div`
   .title-option-image {
     width: 100%;
     height: 45px;
+  }
+  .directory-header {
+    display: flex;
+    flex-direction: column;
+    .directory-header-content {
+      display: flex;
+      flex-direction: row;
+      .directory-header-title {
+        flex: 1;
+        text-align: center;
+      }
+    }
   }
   .directory-content {
     width: 100%;
@@ -37,7 +50,6 @@ const StyledDirectory = styled.div`
       border-radius: 0 0 8px 0;
       img {
         width: 50px;
-        margin-top: 30px;
       }
       .file {
         width: 80px;
@@ -46,25 +58,60 @@ const StyledDirectory = styled.div`
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        border-radius: 4px;
+        img {
+          width: 90%;
+          padding: 7px;
+          border-radius: 4px;
+        }
+        .file-name {
+          padding: 0 5px;
+          border-radius: 4px;
+        }
+
+        &:hover {
+          cursor: default;
+        }
+        &:focus {
+          img {
+            background-color: #e2e2e2 !important;
+          }
+          .file-name {
+            background-color: #007bff !important;
+            color: white;
+          }
+        }
       }
     }
   }
 `;
 
-const DirectoryBlock: React.FC = () => {
+interface DirectoryBlockProps {
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: DirectoryBlockProps) => {
   return (
     <StyledDirectory>
-      <div className="directory-title">
-        <div>헤더</div>
+      <div className="directory-header">
+        <div className="directory-header-content">
+          <ButtonList
+            onClick={() => {
+              console.log('hello');
+              setVisible(false);
+            }}
+          />
+          <div className="directory-header-title">헤더</div>
+        </div>
         <img src={titleimg} alt="titleimg" className="title-option-image"></img>
       </div>
       <div className="directory-content">
         <img src={sideimg} alt="sideimg" className="directory-side-image"></img>
         <div className="file-page">
-          <div className="file">
+          <button className="file">
             <img src={fileimg} alt="file" />
-            <div>name</div>
-          </div>
+            <div className="file-name">name</div>
+          </button>
         </div>
       </div>
     </StyledDirectory>

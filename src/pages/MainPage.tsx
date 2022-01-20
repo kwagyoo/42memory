@@ -10,15 +10,18 @@ const StyledButton = styled.button`
   background-color: transparent;
   border: none;
   img {
-    width: 90px;
-    height: 70px;
+    width: 100px;
+    height: 90px;
+    padding: 10px 5px;
+    border-radius: 5px;
   }
   &:hover {
     cursor: default;
   }
   &:active {
     img {
-      border: solid 1px white;
+      outline: solid 1px white;
+      background-color: rgba(74, 74, 74, 0.5);
     }
   }
 `;
@@ -28,7 +31,7 @@ const MainPage: React.FC = () => {
 
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'start', justifyContent: 'end' }}>
-      {visible && <DirectoryBlock />}
+      {visible && <DirectoryBlock setVisible={setVisible} />}
       <StyledButton onClick={() => setVisible(true)}>
         <img src={folder} alt="folderimg" />
       </StyledButton>
