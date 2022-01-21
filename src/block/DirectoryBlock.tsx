@@ -3,10 +3,11 @@ import sideimg from '../image/42memory_folder_side.png';
 import titleimg from '../image/42memory_folder_title_option.png';
 import fileimg from '../image/42memory_file.png';
 import ButtonList from '../common/ButtonList';
+import Draggable from 'react-draggable';
+// import { useState, useCallback, useRef, useEffect } from 'react';
+
 const StyledDirectory = styled.div`
   position: absolute;
-  left: 100px;
-  top: 100px;
   width: 1000px;
   height: 800px;
   display: flex;
@@ -91,30 +92,55 @@ interface DirectoryBlockProps {
 }
 
 const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: DirectoryBlockProps) => {
+  //   const [x, setX] = useState(0);
+  //   const [y, setY] = useState(0);
+  //   const headerRef = useRef<any>(null);
+
+  //   const update = useCallback(
+  //     (e: MouseEvent): void => {
+  //       console.log(e.pageX, e.pageY);
+  //       const shiftX = e.pageX - headerRef.current.getBoundingClientRect().left;
+  //       const shiftY = e.pageY - headerRef.current.getBoundingClientRect().top;
+  //       console.log('handle', headerRef.current.getBoundingClientRect().left, headerRef.current.getBoundingClientRect().top);
+  //       console.log('shift', shiftX, shiftY);
+  //       setX(e.pageX - shiftX);
+  //       setY(e.pageY - shiftY);
+  //     },
+  //     [setX, setY],
+  //   );
+
+  //   useEffect(() => {
+  //     headerRef.current.onDragstart = function () {
+  //       return false;
+  //     };
+  //   }, []);
+
   return (
-    <StyledDirectory>
-      <div className="directory-header">
-        <div className="directory-header-content">
-          <ButtonList
-            onClick={() => {
-              console.log('hello');
-              setVisible(false);
-            }}
-          />
-          <div className="directory-header-title">Messages</div>
+    <Draggable>
+      <StyledDirectory>
+        <div className="directory-header">
+          <div className="directory-header-content">
+            <ButtonList
+              onClick={() => {
+                console.log('hello');
+                setVisible(false);
+              }}
+            />
+            <div className="directory-header-title">Messages</div>
+          </div>
+          <img src={titleimg} alt="titleimg" className="title-option-image"></img>
         </div>
-        <img src={titleimg} alt="titleimg" className="title-option-image"></img>
-      </div>
-      <div className="directory-content">
-        <img src={sideimg} alt="sideimg" className="directory-side-image"></img>
-        <div className="file-page">
-          <button className="file">
-            <img src={fileimg} alt="file" />
-            <div className="file-name">name</div>
-          </button>
+        <div className="directory-content">
+          <img src={sideimg} alt="sideimg" className="directory-side-image"></img>
+          <div className="file-page">
+            <button className="file">
+              <img src={fileimg} alt="file" />
+              <div className="file-name">name</div>
+            </button>
+          </div>
         </div>
-      </div>
-    </StyledDirectory>
+      </StyledDirectory>
+    </Draggable>
   );
 };
 

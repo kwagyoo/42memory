@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import DirectoryBlock from '../block/DirectoryBlock';
-import MessageBlock from '../block/MessageBlock';
-import MessageWriteBlock from '../block/MessageWriteBlock';
 import folder from '../image/42memory_folder.png';
 
 const StyledButton = styled.button`
@@ -50,8 +48,6 @@ const MainPage: React.FC = () => {
         <img src={folder} alt="folderimg" />
         <p>Messages</p>
       </StyledButton>
-      <MessageBlock />
-      <MessageWriteBlock />
     </div>
   );
 };
