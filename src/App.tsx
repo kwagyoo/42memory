@@ -11,6 +11,7 @@ const BackgroundDiv = styled.div`
   background-image: url(${WallpaperImg});
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
   @media only screen and (max-width: 768px) {
   }
 `;

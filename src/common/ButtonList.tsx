@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import closeButtonImg from '../image/42memory_close_button.png';
 import miniButtonImg from '../image/42memory_minimize_button.png';
 import maxiButtonImg from '../image/42memory_maximize_button.png';
+import closeButtonhover from '../image/42memory_close_button_hover.png';
+import miniButtonImghover from '../image/42memory_minimize_button_hover.png';
+import maxiButtonImghover from '../image/42memory_maximize_button_hover.png';
 
 const StyledButtonList = styled.div`
   flex: 0 0 80px;
@@ -14,13 +17,21 @@ const StyledButtonList = styled.div`
   .button-list {
     width: 20px;
     height: 20px;
-    padding: 2px;
+    padding: 0 1px;
     img {
       width: 15px;
       height: 15px;
     }
-    img:hover {
-      filter: saturate(200%);
+  }
+  &:hover {
+    .close-button {
+      content: url(${closeButtonhover});
+    }
+    .minimize-button {
+      content: url(${miniButtonImghover});
+    }
+    .maximize-button {
+      content: url(${maxiButtonImghover});
     }
   }
 `;
@@ -36,7 +47,7 @@ const ButtonList: React.FC<LoginProps> = ({ onClick }: LoginProps) => {
         <img src={closeButtonImg} alt="close button" className="close-button" />
       </button>
       <button className="button-list">
-        <img src={miniButtonImg} alt="minimize button" className=" minimize-button" />
+        <img src={miniButtonImg} alt="minimize button" className="minimize-button" />
       </button>
       <button className="button-list">
         <img src={maxiButtonImg} alt="maximize button" className="maximize-button" />
