@@ -1,8 +1,15 @@
+@font-face { /* 애플산돌고딕 폰트 적용 */
+	font-family: "SDGothic";
+	src: url("./font/AppleSDGothicNeoM.ttf") format("truetype");
+	font-weight: normal;
+  } /* 이후 "SDGothic"으로 폰트 적용 가능 */
+
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'SDGothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -10,4 +17,9 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+button, input {
+    border: none !important;
+    background-color: transparent !important;
 }
