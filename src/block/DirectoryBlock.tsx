@@ -6,6 +6,11 @@ import ButtonList from '../common/ButtonList';
 import { useCallback, useRef } from 'react';
 
 const StyledDirectory = styled.div`
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   position: absolute;
   width: 1000px;
   height: 800px;
@@ -91,27 +96,6 @@ interface DirectoryBlockProps {
 }
 
 const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: DirectoryBlockProps) => {
-  // const [distance, setDistance] = useState([0, 0]);
-  //   const headerRef = useRef<any>(null);
-
-  //   const update = useCallback(
-  //     (e: MouseEvent): void => {
-  //       console.log(e.pageX, e.pageY);
-  //       const shiftX = e.pageX - headerRef.current.getBoundingClientRect().left;
-  //       const shiftY = e.pageY - headerRef.current.getBoundingClientRect().top;
-  //       console.log('handle', headerRef.current.getBoundingClientRect().left, headerRef.current.getBoundingClientRect().top);
-  //       console.log('shift', shiftX, shiftY);
-  //       setX(e.pageX - shiftX);
-  //       setY(e.pageY - shiftY);
-  //     },
-  //     [setX, setY],
-  //   );
-
-  //   useEffect(() => {
-  //     headerRef.current.onDragstart = function () {
-  //       return false;
-  //     };
-  //   }, []);
   const directoryRef = useRef<any>(null);
 
   const startDrag = useCallback((e) => {
@@ -119,38 +103,29 @@ const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: Directory
     const distOffsetX = e.pageX - refDiv.offsetLeft;
     const distOffsetY = e.pageY - refDiv.offsetTop;
 
-    const test = (e: MouseEvent): void => {
+    const moveDrag = (e: MouseEvent): void => {
       const refDiv = directoryRef.current;
-      refDiv.style.left = `${e.pageX - distOffsetX}px`;
-      refDiv.style.top = `${e.pageY - distOffsetY}px`;
+      const right = parseInt(refDiv.offsetLeft) + parseInt(refDiv.offsetWidth);
+      const down = parseInt(refDiv.offsetTop) + parseInt(refDiv.offsetHeight);
+      refDiv.style.left = `${refDiv.offsetLeft <= 0 ? 1 : right >= window.innerWidth ? window.innerWidth - refDiv.offsetWidth - 1 : e.pageX - distOffsetX}px`;
+      refDiv.style.top = `${refDiv.offsetTop <= 0 ? 1 : down >= window.innerHeight ? window.innerHeight - refDiv.offsetHeight - 1 : e.pageY - distOffsetY}px`;
     };
 
-    refDiv.addEventListener('mousemove', test);
-    document.addEventListener('mousemove', test); // 빠르게 마우스를 이동하면 refDiv의 영역에서 나가서 이벤트가 발생을 안함.
+    refDiv.addEventListener('mousemove', moveDrag);
+    document.addEventListener('mousemove', moveDrag); // 빠르게 마우스를 이동하면 refDiv의 영역에서 나가서 이벤트가 발생을 안함.
     document.addEventListener(
       'mouseup',
       () => {
-        document.removeEventListener('mousemove', test);
-        refDiv.removeEventListener('mousemove', test);
+        document.removeEventListener('mousemove', moveDrag);
+        refDiv.removeEventListener('mousemove', moveDrag);
       },
       { once: true },
     );
-    refDiv.addEventListener('mouseup', () => refDiv.removeEventListener('mousemove', test));
+    refDiv.addEventListener('mouseup', () => refDiv.removeEventListener('mousemove', moveDrag));
   }, []);
-
-  //   const endDrag = useCallback(
-  //     (e) => {
-  //       const refDiv = directoryRef.current;
-  //       setDistance([0, 0]);
-  //       console.log('hi');
-  //       refDiv.removeEventListener('mousemove', test);
-  //     },
-  //     [setDistance],
-  //   );
-
   return (
-    <StyledDirectory ref={directoryRef} onMouseDown={startDrag}>
-      <div className="directory-header">
+    <StyledDirectory ref={directoryRef}>
+      <div className="directory-header" onMouseDown={startDrag}>
         <div className="directory-header-content">
           <ButtonList
             onClick={() => {
