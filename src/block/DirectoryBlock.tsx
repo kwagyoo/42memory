@@ -3,8 +3,7 @@ import sideimg from '../image/42memory_folder_side.png';
 import titleimg from '../image/42memory_folder_title_option.png';
 import fileimg from '../image/42memory_file.png';
 import ButtonList from '../common/ButtonList';
-import Draggable from 'react-draggable';
-// import { useState, useCallback, useRef, useEffect } from 'react';
+import { useCallback, useRef } from 'react';
 
 const StyledDirectory = styled.div`
   position: absolute;
@@ -92,8 +91,7 @@ interface DirectoryBlockProps {
 }
 
 const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: DirectoryBlockProps) => {
-  //   const [x, setX] = useState(0);
-  //   const [y, setY] = useState(0);
+  // const [distance, setDistance] = useState([0, 0]);
   //   const headerRef = useRef<any>(null);
 
   //   const update = useCallback(
@@ -114,33 +112,68 @@ const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: Directory
   //       return false;
   //     };
   //   }, []);
+  const directoryRef = useRef<any>(null);
+
+  const startDrag = useCallback((e) => {
+    const refDiv = directoryRef.current;
+    const distOffsetX = e.pageX - refDiv.offsetLeft;
+    const distOffsetY = e.pageY - refDiv.offsetTop;
+
+    const test = (e: MouseEvent): void => {
+      const refDiv = directoryRef.current;
+      refDiv.style.left = `${e.pageX - distOffsetX}px`;
+      refDiv.style.top = `${e.pageY - distOffsetY}px`;
+    };
+
+    refDiv.addEventListener('mousemove', test);
+    document.addEventListener('mousemove', test); // 빠르게 마우스를 이동하면 refDiv의 영역에서 나가서 이벤트가 발생을 안함.
+    document.addEventListener(
+      'mouseup',
+      () => {
+        document.removeEventListener('mousemove', test);
+        refDiv.removeEventListener('mousemove', test);
+      },
+      { once: true },
+    );
+    refDiv.addEventListener('mouseup', () => refDiv.removeEventListener('mousemove', test));
+  }, []);
+
+  //   const endDrag = useCallback(
+  //     (e) => {
+  //       const refDiv = directoryRef.current;
+  //       setDistance([0, 0]);
+  //       console.log('hi');
+  //       refDiv.removeEventListener('mousemove', test);
+  //     },
+  //     [setDistance],
+  //   );
 
   return (
-    <Draggable>
-      <StyledDirectory>
-        <div className="directory-header">
-          <div className="directory-header-content">
-            <ButtonList
-              onClick={() => {
-                console.log('hello');
-                setVisible(false);
-              }}
-            />
-            <div className="directory-header-title">Messages</div>
-          </div>
-          <img src={titleimg} alt="titleimg" className="title-option-image"></img>
-        </div>
-        <div className="directory-content">
-          <img src={sideimg} alt="sideimg" className="directory-side-image"></img>
-          <div className="file-page">
-            <button className="file">
-              <img src={fileimg} alt="file" />
-              <div className="file-name">name</div>
-            </button>
+    <StyledDirectory ref={directoryRef} onMouseDown={startDrag}>
+      <div className="directory-header">
+        <div className="directory-header-content">
+          <ButtonList
+            onClick={() => {
+              console.log('hello');
+              setVisible(false);
+            }}
+          />
+          <div className="directory-header-title" draggable="false">
+            Messages
           </div>
         </div>
-      </StyledDirectory>
-    </Draggable>
+        <img src={titleimg} alt="titleimg" className="title-option-image"></img>
+      </div>
+      <div className="directory-content">
+        <img src={sideimg} alt="sideimg" className="directory-side-image"></img>
+        <div className="file-page">
+          <button className="file">
+            <img src={fileimg} alt="file" />
+            <div className="file-name">name</div>
+          </button>
+        </div>
+      </div>
+    </StyledDirectory>
   );
 };
 
