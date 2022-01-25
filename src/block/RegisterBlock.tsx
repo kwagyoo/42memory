@@ -61,6 +61,24 @@ const StyledForm = styled(Form)`
     border-radius: 10px;
     margin-bottom: 2px;
   }
+  .btn-secondary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    &:focus {
+      background-color: #5c636a !important;
+      border-color: #565e64 !important;
+      box-shadow: none;
+    }
+  }
+  .btn-primary {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    &:focus {
+      background-color: #0b5ed7 !important;
+      border-color: #0a58ca !important;
+      box-shadow: none;
+    }
+  }
 `;
 
 const RegisterBlock: React.FC = () => {

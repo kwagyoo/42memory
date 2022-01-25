@@ -16,6 +16,11 @@ const StyledDirectory = styled.div`
       width: 243px;
       height: 100%;
       border-radius: 0 0 0 8px;
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
+      user-drag: none;
     }
     .file-page {
       background-color: white;
@@ -67,9 +72,11 @@ interface DirectoryBlockProps {
 const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: DirectoryBlockProps) => {
   return (
     <DraggableWindow
+      width={1000}
+      height={800}
       title="Messages"
-      onHeaderButtonClick={() => {
-        console.log('hello');
+      onHeaderButtonClick={(e) => {
+        e.preventDefault();
         setVisible(false);
       }}
     >

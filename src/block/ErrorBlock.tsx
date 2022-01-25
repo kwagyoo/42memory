@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import errorimg from '../image/42memory_warning_icon.png';
 const StyledError = styled.div`
   width: 600px;
-
   .card-body {
     display: flex;
     flex-direction: row;

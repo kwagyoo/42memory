@@ -1,20 +1,32 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useContext, useRef } from 'react';
 import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 import ButtonList from './ButtonList';
 import titleimg from '../image/42memory_folder_title_option.png';
 import sendimg from '../image/42memory_send_msg.png';
+import { ZindexContext } from '../module/Context';
 
 interface DraggableWindowProps {
   title: string;
-  onHeaderButtonClick: () => void;
+  onHeaderButtonClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   children: JSX.Element;
+  width: number;
+  height: number;
+}
+
+interface StyledWindowProps {
+  width: number;
+  height: number;
+  zindex: number;
 }
 
 const StyledWindow = styled.div`
   position: absolute;
-  width: 1000px;
-  height: 800px;
+  left: 500px;
+  top: 100px;
+  width: ${(props: StyledWindowProps) => `${props.width}px`};
+  height: ${(props: StyledWindowProps) => `${props.height}px`};
+  z-index: ${(props: StyledWindowProps) => `${props.zindex}`};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,6 +34,12 @@ const StyledWindow = styled.div`
   border-radius: 8px;
   border: 1px solid #beb5b4;
   background-color: #eeeeee;
+  /* 드래그 방지 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   .card {
     width: 100%;
     height: 100%;
@@ -33,7 +51,8 @@ const StyledWindow = styled.div`
     flex: 0 0 30px;
     width: 100%;
     padding: 0.1rem 0 0 0;
-    background-color: #dddddd;
+    background: linear-gradient(to bottom, #e1e1e1, #dfdfdf, #dddedd, #dcdcdc, #dadada, #d8d8d8, #d7d7d7, #d5d5d5, #d3d3d3, #d1d1d1, #d0d0d0, #cecece);
+    border-bottom: solid 1px #b2b2b2;
     .header-content {
       display: flex;
       flex: 1 0;
@@ -47,6 +66,13 @@ const StyledWindow = styled.div`
       flex: 1;
       text-align: center;
       font-size: 18px;
+    }
+    .title-option-image {
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
+      user-drag: none;
     }
     .send-button {
       margin: 2px 10px 2px 0;
@@ -68,16 +94,16 @@ const StyledWindow = styled.div`
     padding: 0;
   }
 `;
-const DraggableWindow: React.FC<DraggableWindowProps> = ({ title, onHeaderButtonClick, children }: DraggableWindowProps) => {
-  const directoryRef = useRef<any>(null);
+const DraggableWindow: React.FC<DraggableWindowProps> = ({ title, width, height, onHeaderButtonClick, children }: DraggableWindowProps) => {
+  const windowRef = useRef<any>(null);
 
   const startDrag = useCallback((e) => {
-    const refDiv = directoryRef.current;
+    const refDiv = windowRef.current;
     const distOffsetX = e.pageX - refDiv.offsetLeft;
     const distOffsetY = e.pageY - refDiv.offsetTop;
 
     const moveDrag = (e: MouseEvent): void => {
-      const refDiv = directoryRef.current;
+      const refDiv = windowRef.current;
       const right = parseInt(refDiv.offsetLeft) + parseInt(refDiv.offsetWidth);
       const down = parseInt(refDiv.offsetTop) + parseInt(refDiv.offsetHeight);
       refDiv.style.left = `${refDiv.offsetLeft <= 0 ? 1 : right >= window.innerWidth ? window.innerWidth - refDiv.offsetWidth - 1 : e.pageX - distOffsetX}px`;
@@ -97,8 +123,11 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({ title, onHeaderButton
     refDiv.addEventListener('mouseup', () => refDiv.removeEventListener('mousemove', moveDrag));
   }, []);
 
+  const { zIndex, addIndex } = useContext(ZindexContext);
+
+  console.log(zIndex);
   return (
-    <StyledWindow ref={directoryRef}>
+    <StyledWindow onClick={addIndex} width={width} height={height} ref={windowRef} zindex={zIndex}>
       <Card>
         <Card.Header onMouseDown={startDrag}>
           <div className="header-content">
