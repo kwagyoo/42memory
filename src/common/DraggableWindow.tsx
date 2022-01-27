@@ -22,7 +22,7 @@ interface StyledWindowProps {
 
 const StyledWindow = styled.div`
   position: absolute;
-  left: 500px;
+  left: 200px;
   top: 100px;
   width: ${(props: StyledWindowProps) => `${props.width}px`};
   height: ${(props: StyledWindowProps) => `${props.height}px`};

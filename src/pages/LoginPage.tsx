@@ -27,6 +27,7 @@ const LoginDiv = styled.div`
     display: flex;
     flex-direction: column;
     .login-additional-btn {
+      width: 100%;
       font-size: 15px;
       background-color: transparent;
       border: none;
@@ -61,6 +62,8 @@ const CustomForm = styled(Form)`
 `;
 
 const LoginPage: React.FC = () => {
+  const URL =
+    'https://api.intra.42.fr/oauth/authorize?client_id=9ae035b5bc89a1fbaa1096e1889224f9955fb5ec8b834d53d26733485b8a7ed9&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fregister&response_type=code';
   return (
     <LoginDiv>
       <div className="test">
@@ -76,7 +79,9 @@ const LoginPage: React.FC = () => {
           </div>
         </CustomForm>
         <div className="login-addtional">
-          <button className="login-additional-btn">회원가입</button>
+          <a href={URL}>
+            <button className="login-additional-btn">회원가입</button>
+          </a>
           <button className="login-additional-btn">비밀번호를 잊으셨나요?</button>
         </div>
       </div>

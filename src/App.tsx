@@ -6,6 +6,8 @@ import Header from './common/Header';
 import MainPage from './pages/MainPage';
 import RegisterPage from './pages/RegisterPage';
 import ZindexProvider from './module/Context';
+import LoginPage from './pages/LoginPage';
+import WritePage from './pages/WritePage';
 
 const BackgroundDiv = styled.div`
   background-image: url(${WallpaperImg});
@@ -24,8 +26,10 @@ const App: React.VFC = () => {
       <Header />
       <ZindexProvider>
         <Routes>
-          <Route path="/" element={<MainPage />} />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/mainPage" element={<MainPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/write" element={<WritePage />} />
         </Routes>
       </ZindexProvider>
     </BackgroundDiv>

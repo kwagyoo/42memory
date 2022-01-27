@@ -1,5 +1,7 @@
+import QueryString from 'qs';
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
 import styled from 'styled-components';
+import { signUp } from '../api/auth';
 import image42 from '../image/42memory_title.png';
 
 const StyledRegister = styled.div`
@@ -82,6 +84,17 @@ const StyledForm = styled(Form)`
 `;
 
 const RegisterBlock: React.FC = () => {
+  const test = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
+    e.preventDefault();
+    const query = QueryString.parse(location.search, {
+      ignoreQueryPrefix: true,
+    });
+    const data = { code: query.code, userClusterName: 'bkwag' };
+    const res = await signUp(data);
+    console.log(res);
+    console.log('test');
+  };
+
   return (
     <StyledRegister>
       <div className="register-header">
@@ -110,7 +123,7 @@ const RegisterBlock: React.FC = () => {
             <Button variant="secondary" size="sm">
               취소
             </Button>
-            <Button variant="primary" type="submit" size="sm">
+            <Button variant="primary" type="submit" onClick={test} size="sm">
               확인
             </Button>
           </div>
