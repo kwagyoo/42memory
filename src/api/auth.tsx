@@ -9,8 +9,14 @@ interface resData {
 
 interface signUpData {
   userClusterName: string;
-  code: string | ParsedQs | string[] | ParsedQs[] | undefined;
+  accessToken: string;
 }
+
+interface signInData {
+  userClusterName: string;
+  userPassword: string;
+}
+
 export const startRegister = async (code: string | ParsedQs | string[] | ParsedQs[] | undefined): Promise<any> => {
   const res: resData = await client.post('https://api.intra.42.fr/oauth/token', {
     grant_type: 'authorization_code',
@@ -25,13 +31,20 @@ export const startRegister = async (code: string | ParsedQs | string[] | ParsedQ
     },
   });
 
-  return info42;
+  return { info: info42, accessToken: res.data.access_token };
 };
 
 export const signUp = async (data: signUpData): Promise<any> =>
   await client.post(`/${data.userClusterName}`, {
-    code: data.code,
+    accessToken: data.accessToken,
     userPassword: '123',
     userDeadline: '2022-01-29',
     userEmail: 'kwag93@naver.com',
+  });
+
+export const signIn = async (data: signInData): Promise<any> =>
+  await client.get(`/${data.userClusterName}`, {
+    params: {
+      userPassword: data.userPassword,
+    },
   });

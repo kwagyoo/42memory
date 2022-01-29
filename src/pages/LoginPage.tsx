@@ -1,6 +1,9 @@
 import { Form, Image } from 'react-bootstrap';
 import styled from 'styled-components';
 import image42 from '../image/42memory_title.png';
+import { BsArrowRightCircle } from 'react-icons/bs';
+import { signIn } from '../api/auth';
+import { useNavigate } from 'react-router';
 
 const LoginDiv = styled.div`
   position: absolute;
@@ -59,23 +62,58 @@ const CustomForm = styled(Form)`
       box-shadow: none !important;
     }
   }
+  .inputDiv {
+    position: relative;
+    .submit-btn {
+      position: absolute;
+      left: 170px;
+      top: 3px;
+      width: 30px;
+    }
+    .submit-icon {
+      width: 100%;
+      cursor: pointer;
+      color: white;
+    }
+  }
 `;
 
 const LoginPage: React.FC = () => {
-  const URL =
-    'https://api.intra.42.fr/oauth/authorize?client_id=9ae035b5bc89a1fbaa1096e1889224f9955fb5ec8b834d53d26733485b8a7ed9&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fregister&response_type=code';
+  const navigate = useNavigate();
+
+  const URL = process.env.REACT_APP_REGISTER_URL;
+
+  //   const onKeyPress = (e: React.KeyboardEvent<FormControlProps>): void => {
+  //     if (e.key === 'Enter') onLogin(e);
+  //   };
+  // 엔터키 작동을 하려고 함. e 타입형식이 맞지 않아 onLogin 을 할수가 없음 .? 해결이 어떻게 되어야할까
+  const onLogin: React.FormEventHandler<HTMLFormElement> = async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
+    e.preventDefault();
+    const { inputId, inputPassword } = e.currentTarget;
+    const data = { userClusterName: inputId.value, userPassword: inputPassword.value };
+    try {
+      const res = await signIn(data);
+      console.log(res);
+      navigate('/mainPage');
+    } catch (e: any) {
+      console.log(e.response);
+    }
+  };
   return (
     <LoginDiv>
-      <div className="test">
+      <div>
         <div className="thumbnail-42">
           <Image src={image42} />
         </div>
-        <CustomForm className="row g-3">
+        <CustomForm className="row g-3" onSubmit={onLogin}>
           <div className="col-md-12 col-lg-12">
-            <Form.Control type="email" className="form-control" id="inputId" placeholder="아이디를 입력" />
+            <Form.Control type="text" className="form-control" id="inputId" placeholder="아이디를 입력" />
           </div>
-          <div className="col-md-12 col-lg-12">
+          <div className="inputDiv">
             <Form.Control type="password" className="form-control" id="inputPassword" placeholder="암호 입력" />
+            <button className="submit-btn" type="submit">
+              <BsArrowRightCircle className="submit-icon" />
+            </button>
           </div>
         </CustomForm>
         <div className="login-addtional">

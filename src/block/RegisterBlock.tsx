@@ -1,7 +1,8 @@
 import QueryString from 'qs';
+import { useEffect, useState } from 'react';
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
 import styled from 'styled-components';
-import { signUp } from '../api/auth';
+import { signUp, startRegister } from '../api/auth';
 import image42 from '../image/42memory_title.png';
 
 const StyledRegister = styled.div`
@@ -84,16 +85,34 @@ const StyledForm = styled(Form)`
 `;
 
 const RegisterBlock: React.FC = () => {
+  const [user, setUser] = useState<any>({});
   const test = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
     e.preventDefault();
-    const query = QueryString.parse(location.search, {
-      ignoreQueryPrefix: true,
-    });
-    const data = { code: query.code, userClusterName: 'bkwag' };
-    const res = await signUp(data);
-    console.log(res);
-    console.log('test');
+    const data = { accessToken: user.accessToken, userClusterName: 'bkwag' };
+    try {
+      const res = await signUp(data);
+      console.log(res);
+      console.log('test');
+    } catch (e: any) {
+      console.log(e.response);
+    }
   };
+
+  const getUser = async (): Promise<any> => {
+    try {
+      const query = QueryString.parse(location.search, {
+        ignoreQueryPrefix: true,
+      });
+      const res = await startRegister(query.code);
+      setUser(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    void getUser();
+  }, []);
 
   return (
     <StyledRegister>
