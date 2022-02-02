@@ -83,10 +83,6 @@ const LoginPage: React.FC = () => {
 
   const URL = process.env.REACT_APP_REGISTER_URL;
 
-  //   const onKeyPress = (e: React.KeyboardEvent<FormControlProps>): void => {
-  //     if (e.key === 'Enter') onLogin(e);
-  //   };
-  // 엔터키 작동을 하려고 함. e 타입형식이 맞지 않아 onLogin 을 할수가 없음 .? 해결이 어떻게 되어야할까
   const onLogin: React.FormEventHandler<HTMLFormElement> = async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
     e.preventDefault();
     const { inputId, inputPassword } = e.currentTarget;

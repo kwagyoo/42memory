@@ -1,14 +1,16 @@
-import { ParsedQs } from 'qs';
 import client from './client';
 
 interface resData {
   data: {
-    access_token: string;
+    [key: string]: string;
   };
 }
 
 interface signUpData {
   userClusterName: string;
+  userDeadline: string;
+  userEmail?: string;
+  userPassword?: string;
   accessToken: string;
 }
 
@@ -17,7 +19,7 @@ interface signInData {
   userPassword: string;
 }
 
-export const startRegister = async (code: string | ParsedQs | string[] | ParsedQs[] | undefined): Promise<any> => {
+export const startRegister = async (code: string): Promise<any> => {
   const res: resData = await client.post('https://api.intra.42.fr/oauth/token', {
     grant_type: 'authorization_code',
     client_id: process.env.REACT_APP_REGISTER_CLIENT_UID,
@@ -37,9 +39,9 @@ export const startRegister = async (code: string | ParsedQs | string[] | ParsedQ
 export const signUp = async (data: signUpData): Promise<any> =>
   await client.post(`/${data.userClusterName}`, {
     accessToken: data.accessToken,
-    userPassword: '123',
-    userDeadline: '2022-01-29',
-    userEmail: 'kwag93@naver.com',
+    userPassword: data.userPassword,
+    userDeadline: data.userDeadline,
+    userEmail: data.userEmail,
   });
 
 export const signIn = async (data: signInData): Promise<any> =>
