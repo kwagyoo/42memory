@@ -2,7 +2,7 @@ import { Form, Image } from 'react-bootstrap';
 import styled from 'styled-components';
 import image42 from '../image/42memory_title.png';
 import { BsArrowRightCircle } from 'react-icons/bs';
-import { signIn } from '../api/auth';
+import { signIn, SignInFetch } from '../api/auth';
 import { useNavigate } from 'react-router';
 
 const LoginDiv = styled.div`
@@ -82,15 +82,15 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   const URL = process.env.REACT_APP_REGISTER_URL;
-
   const onLogin: React.FormEventHandler<HTMLFormElement> = async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
     e.preventDefault();
     const { inputId, inputPassword } = e.currentTarget;
     const data = { userClusterName: inputId.value, userPassword: inputPassword.value };
     try {
-      const res = await signIn(data);
-      console.log(res);
-      navigate('/mainPage');
+      const res: SignInFetch = await signIn(data);
+      sessionStorage.setItem('accessToken', res.accessToken);
+      sessionStorage.setItem('userID', res.userID);
+      navigate(`/mainPage/${res.userID}`);
     } catch (e: any) {
       console.log(e.response);
     }

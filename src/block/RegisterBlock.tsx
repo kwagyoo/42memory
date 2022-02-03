@@ -1,9 +1,12 @@
 import QueryString from 'qs';
 import { useCallback, useEffect, useState } from 'react';
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
+import { Formik } from 'formik';
 import styled from 'styled-components';
 import { signUp, startRegister } from '../api/auth';
 import image42 from '../image/42memory_title.png';
+import * as Yup from 'yup';
+import { useNavigate } from 'react-router';
 
 const StyledRegister = styled.div`
   width: 800px;
@@ -49,7 +52,7 @@ const StyledRegister = styled.div`
 `;
 
 const StyledForm = styled(Form)`
-  width: 250px;
+  width: 350px;
   margin-top: 15px;
   .btn-group {
     width: 100%;
@@ -90,6 +93,18 @@ const StyledForm = styled(Form)`
   .form-floating > .form-select ~ label {
     opacity: 0.8;
   }
+  .form-floating {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .error-message {
+    padding-top: 15px;
+    width: 300px;
+    color: #e7747f;
+    font-weight: 300;
+    text-align: end;
+  }
 `;
 
 interface userProps {
@@ -100,7 +115,14 @@ interface userProps {
   accessToken: string;
 }
 
+interface FormValues {
+  userEmail: string;
+  userPassword: string;
+  userPasswordConfirm: string;
+}
+
 const RegisterBlock: React.FC = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<userProps>({
     userClusterName: '',
     userDeadline: '',
@@ -108,30 +130,13 @@ const RegisterBlock: React.FC = () => {
     userPassword: '',
     accessToken: '',
   });
-  const [validated, setValidated] = useState(false);
-
-  const onRegister = useCallback(async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
-    e.preventDefault();
-    const { inputPassword, inputPasswordConfirm, inputEmail }: { [name: string]: { value: string; [name: string]: string } } = e.currentTarget;
-    const form = e.currentTarget;
-    if (!form.checkValidity()) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    if (inputPassword.value?.match(/^\w{6,12}/) === null || inputPassword.value !== inputPasswordConfirm.value) {
-      return;
-    }
-    setValidated(true);
-    setUser({
-      ...user,
-      userEmail: inputEmail.value,
-      userPassword: inputPassword.value,
-    });
+  const onRegister = useCallback(async (values: FormValues & userProps): Promise<void> => {
     try {
-      const res = await signUp(user);
+      const res = await signUp(values);
       console.log(res);
+      navigate('/');
     } catch (e: any) {
-      console.log(e);
+      alert('오류 발생!');
     }
   }, []);
 
@@ -156,6 +161,14 @@ const RegisterBlock: React.FC = () => {
     void getUser();
   }, []);
 
+  const initialValues: FormValues = { userEmail: '', userPassword: '', userPasswordConfirm: '' };
+
+  const SignupSchema = Yup.object().shape({
+    userEmail: Yup.string().email('Invalid email').required('Required'),
+    userPassword: Yup.string().min(6, 'Too Short!').max(13, 'Too Long!').required('Required'),
+    userPasswordConfirm: Yup.string().oneOf([Yup.ref('userPassword'), null], 'Passwords must match'),
+  });
+
   return (
     <StyledRegister>
       <div className="register-header">
@@ -167,40 +180,75 @@ const RegisterBlock: React.FC = () => {
           42Memory에 오신 것을 환영합니다. <br />
           URL을 생성하기 위해 아래의 정보를 입력해주세요.
         </div>
-        <StyledForm noValidate validated={validated} onSubmit={onRegister}>
-          <FloatingLabel label="username">
-            <Form.Control type="text" placeholder="ClusterName" value={user.userClusterName} disabled />
-          </FloatingLabel>
-          <FloatingLabel label="email">
-            <Form.Control type="email" id="inputEmail" placeholder="ClusterName" required />
-            <Form.Control.Feedback type="invalid" className={'float-left'}>
-              이메일을 입력해주세요!
-            </Form.Control.Feedback>
-          </FloatingLabel>
-          <FloatingLabel label="Password">
-            <Form.Control type="password" id="inputPassword" placeholder="Password(6~12자)" required />
-            <Form.Control.Feedback type="invalid" className={'float-left'}>
-              비밀번호를 입력해주세요!
-            </Form.Control.Feedback>
-          </FloatingLabel>
-          <FloatingLabel label="PasswordConfirm">
-            <Form.Control type="password" id="inputPasswordConfirm" placeholder="PasswordConfirm(6~12자)" required />
-            <Form.Control.Feedback type="invalid" className={'float-left'}>
-              비밀번호를 한번 더 입력해주세요!
-            </Form.Control.Feedback>
-          </FloatingLabel>
-          <FloatingLabel label="Deadline">
-            <Form.Control type="date" placeholder="Deadline" value={user.userDeadline} disabled />
-          </FloatingLabel>
-          <div className="btn-group">
-            <Button variant="secondary" size="sm">
-              취소
-            </Button>
-            <Button variant="primary" type="submit" size="sm">
-              확인
-            </Button>
-          </div>
-        </StyledForm>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={SignupSchema}
+          onSubmit={(values, { setSubmitting }) => {
+            setSubmitting(true);
+            void onRegister({ ...values, ...user });
+            setSubmitting(false);
+          }}
+        >
+          {({ touched, values, handleChange, handleBlur, handleSubmit, errors }) => (
+            <StyledForm onSubmit={handleSubmit}>
+              <FloatingLabel label="username">
+                <Form.Control type="text" placeholder="ClusterName" value={user.userClusterName} disabled />
+              </FloatingLabel>
+              <FloatingLabel label="email">
+                <Form.Control
+                  type="email"
+                  name="userEmail"
+                  id="inputEmail"
+                  placeholder="Email"
+                  value={values.userEmail}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+                {errors.userEmail != null && touched.userEmail != null ? <div className="error-message">{errors.userEmail}</div> : null}
+              </FloatingLabel>
+              <FloatingLabel label="Password">
+                <Form.Control
+                  type="password"
+                  name="userPassword"
+                  id="inputPassword"
+                  placeholder="Password(6~12자)"
+                  value={values.userPassword}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+                {errors.userPassword != null && touched.userPassword != null ? <div className="error-message">{errors.userPassword}</div> : null}
+              </FloatingLabel>
+              <FloatingLabel label="PasswordConfirm">
+                <Form.Control
+                  type="password"
+                  name="userPasswordConfirm"
+                  id="inputPasswordConfirm"
+                  placeholder="PasswordConfirm(6~12자)"
+                  value={values.userPasswordConfirm}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+                {errors.userPasswordConfirm != null && touched.userPasswordConfirm != null ? (
+                  <div className="error-message">{errors.userPasswordConfirm}</div>
+                ) : null}
+              </FloatingLabel>
+              <FloatingLabel label="Deadline">
+                <Form.Control type="date" placeholder="Deadline" value={user.userDeadline} disabled />
+              </FloatingLabel>
+              <div className="btn-group">
+                <Button variant="secondary" size="sm">
+                  취소
+                </Button>
+                <Button variant="primary" type="submit" size="sm">
+                  확인
+                </Button>
+              </div>
+            </StyledForm>
+          )}
+        </Formik>
       </div>
     </StyledRegister>
   );

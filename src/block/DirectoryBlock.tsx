@@ -23,6 +23,8 @@ const StyledDirectory = styled.div`
       user-drag: none;
     }
     .file-page {
+      display: flex;
+      flex-direction: row;
       background-color: white;
       width: 100%;
       height: 100%;
@@ -33,11 +35,13 @@ const StyledDirectory = styled.div`
       .file {
         width: 80px;
         height: 110px;
+        margin: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         border-radius: 4px;
+        cursor: pointer;
         img {
           width: 90%;
           padding: 7px;
@@ -65,11 +69,11 @@ const StyledDirectory = styled.div`
   }
 `;
 
-interface DirectoryBlockProps {
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
+// interface DirectoryBlockProps {
+//   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+// }
 
-const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: DirectoryBlockProps) => {
+const DirectoryBlock: React.FC<any> = ({ setVisible, datas, messageData, setMessageData }: any) => {
   return (
     <DraggableWindow
       width={1000}
@@ -84,10 +88,12 @@ const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: Directory
         <div className="directory-content">
           <img src={sideimg} alt="sideimg" className="directory-side-image"></img>
           <div className="file-page">
-            <button className="file">
-              <img src={fileimg} alt="file" />
-              <div className="file-name">name</div>
-            </button>
+            {datas.map((data: any) => (
+              <button className="file" onClick={() => setMessageData([...messageData, data])}>
+                <img src={fileimg} alt="file" />
+                <div className="file-name">{data.ClusterName}</div>
+              </button>
+            ))}
           </div>
         </div>
       </StyledDirectory>

@@ -1,6 +1,6 @@
 import client from './client';
 
-interface resData {
+export interface resData {
   data: {
     [key: string]: string;
   };
@@ -9,14 +9,19 @@ interface resData {
 interface signUpData {
   userClusterName: string;
   userDeadline: string;
-  userEmail?: string;
-  userPassword?: string;
+  userEmail: string;
+  userPassword: string;
   accessToken: string;
 }
 
 interface signInData {
   userClusterName: string;
   userPassword: string;
+}
+
+export interface SignInFetch {
+  userID: string;
+  accessToken: string;
 }
 
 export const startRegister = async (code: string): Promise<any> => {
@@ -36,7 +41,7 @@ export const startRegister = async (code: string): Promise<any> => {
   return { info: info42, accessToken: res.data.access_token };
 };
 
-export const signUp = async (data: signUpData): Promise<any> =>
+export const signUp = async (data: signUpData): Promise<void> =>
   await client.post(`/${data.userClusterName}`, {
     accessToken: data.accessToken,
     userPassword: data.userPassword,
@@ -44,9 +49,11 @@ export const signUp = async (data: signUpData): Promise<any> =>
     userEmail: data.userEmail,
   });
 
-export const signIn = async (data: signInData): Promise<any> =>
-  await client.get(`/${data.userClusterName}`, {
+export const signIn = async (data: signInData): Promise<SignInFetch> => {
+  const res = await client.get(`/${data.userClusterName}`, {
     params: {
       userPassword: data.userPassword,
     },
   });
+  return res.data;
+};

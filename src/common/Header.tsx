@@ -6,7 +6,6 @@ import copyImg from '../image/42memory_copy.png';
 import wifiImg from '../image/Wifi.png';
 import battery from '../image/Battery.png';
 import setting from '../image/Setting.png';
-
 import { useEffect, useState } from 'react';
 
 const StyledDropdown = styled.div`
@@ -140,10 +139,10 @@ const Header: React.FC = () => {
         </DropdownButton>
       </StyledDropdown>
       <div className="clipboard">
-        <CopyToClipboard text="hello" onCopy={() => console.log('copy')}>
+        <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
           <button className="clipboard-btn">
             <img src={copyImg} />
-            clipboard test
+            http://localhost:3000/message/{sessionStorage.getItem('userID')}
           </button>
         </CopyToClipboard>
       </div>

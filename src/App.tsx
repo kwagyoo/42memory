@@ -27,9 +27,9 @@ const App: React.VFC = () => {
       <ZindexProvider>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/mainPage" element={<MainPage />} />
+          <Route path="/mainPage/:userID" element={<MainPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/write" element={<WritePage />} />
+          <Route path="/message/:userID" element={<WritePage />} />
         </Routes>
       </ZindexProvider>
     </BackgroundDiv>

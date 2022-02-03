@@ -124,8 +124,6 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({ title, width, height,
   }, []);
 
   const { zIndex, addIndex } = useContext(ZindexContext);
-
-  console.log(zIndex);
   return (
     <StyledWindow onClick={addIndex} width={width} height={height} ref={windowRef} zindex={zIndex}>
       <Card>

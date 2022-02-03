@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 import DraggableWindow from '../common/DraggableWindow';
@@ -8,13 +9,13 @@ const StyledMessageBlock = styled.div`
   padding: 10px;
 `;
 
-const MessageBlock: React.FC = () => {
+const MessageBlock: React.FC<any> = ({ data, key, deleteFromMessageData }) => {
   return (
-    <DraggableWindow title="from Hyunyoo" width={800} height={600} onHeaderButtonClick={() => console.log('hello')}>
-      <StyledMessageBlock>
-        <Card.Title as="h3">제목</Card.Title>
-        <Card.Text>From.클러스터네임</Card.Text>
-        <Card.Text>텍스트 내용</Card.Text>
+    <DraggableWindow title={`from ${data.ClusterName ?? ''}`} width={800} height={600} onHeaderButtonClick={() => deleteFromMessageData(data)}>
+      <StyledMessageBlock key={key}>
+        <Card.Title as="h3">{data.Title}</Card.Title>
+        <Card.Text>To.클러스터네임</Card.Text>
+        <Card.Text>{data.Contents}</Card.Text>
       </StyledMessageBlock>
     </DraggableWindow>
   );

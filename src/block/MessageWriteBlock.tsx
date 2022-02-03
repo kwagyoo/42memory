@@ -1,5 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
+import { getUserClusterName } from '../api/message';
 import DraggableWindow from '../common/DraggableWindow';
 
 const StyledForm = styled(Form)`
@@ -14,7 +17,21 @@ const StyledForm = styled(Form)`
     resize: none;
   }
 `;
+
 const MessageWriteBlock: React.FC = () => {
+  const params = useParams();
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    void (async () => {
+      if (params.userID !== undefined) {
+        const user = await getUserClusterName(params.userID);
+        console.log(user);
+        setUserName(user.data.userClusterName);
+      }
+    })();
+  }, []);
+  console.log(userName);
   return (
     <DraggableWindow title="Send a message" width={1000} height={800} onHeaderButtonClick={() => console.log('hello')}>
       <StyledForm>
@@ -23,7 +40,7 @@ const MessageWriteBlock: React.FC = () => {
             받는사람
           </Form.Label>
           <Col sm="10">
-            <Form.Control disabled readOnly defaultValue="bkwag" />
+            <Form.Control disabled readOnly defaultValue={userName} />
           </Col>
           <Form.Label column sm="2">
             제목
