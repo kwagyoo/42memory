@@ -11,11 +11,16 @@ const StyledMessageBlock = styled.div`
 
 const MessageBlock: React.FC<any> = ({ data, key, deleteFromMessageData }) => {
   return (
-    <DraggableWindow title={`from ${data.ClusterName ?? ''}`} width={800} height={600} onHeaderButtonClick={() => deleteFromMessageData(data)}>
+    <DraggableWindow
+      title={`To. ${sessionStorage.getItem('userClusterName') ?? ''}`}
+      width={800}
+      height={600}
+      onHeaderButtonClick={() => deleteFromMessageData(data)}
+    >
       <StyledMessageBlock key={key}>
-        <Card.Title as="h3">{data.Title}</Card.Title>
-        <Card.Text>To.클러스터네임</Card.Text>
-        <Card.Text>{data.Contents}</Card.Text>
+        <Card.Title as="h3">{data.messageTitle}</Card.Title>
+        <Card.Text>From. {data.senderNickname}</Card.Text>
+        <Card.Text>{data.messageText}</Card.Text>
       </StyledMessageBlock>
     </DraggableWindow>
   );

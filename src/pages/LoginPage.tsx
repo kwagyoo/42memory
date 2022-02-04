@@ -4,6 +4,7 @@ import image42 from '../image/42memory_title.png';
 import { BsArrowRightCircle } from 'react-icons/bs';
 import { signIn, SignInFetch } from '../api/auth';
 import { useNavigate } from 'react-router';
+import client from '../api/client';
 
 const LoginDiv = styled.div`
   position: absolute;
@@ -90,6 +91,9 @@ const LoginPage: React.FC = () => {
       const res: SignInFetch = await signIn(data);
       sessionStorage.setItem('accessToken', res.accessToken);
       sessionStorage.setItem('userID', res.userID);
+      sessionStorage.setItem('userClusterName', res.userClusterName);
+      // eslint-disable-next-line @typescript-eslint/dot-notation
+      client.defaults.headers.common['Authorization'] = `Bearer ${res.accessToken}`;
       navigate(`/mainPage/${res.userID}`);
     } catch (e: any) {
       console.log(e.response);

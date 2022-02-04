@@ -22,6 +22,7 @@ interface signInData {
 export interface SignInFetch {
   userID: string;
   accessToken: string;
+  userClusterName: string;
 }
 
 export const startRegister = async (code: string): Promise<any> => {

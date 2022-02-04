@@ -130,6 +130,7 @@ const RegisterBlock: React.FC = () => {
     userPassword: '',
     accessToken: '',
   });
+
   const onRegister = useCallback(async (values: FormValues & userProps): Promise<void> => {
     try {
       const res = await signUp(values);

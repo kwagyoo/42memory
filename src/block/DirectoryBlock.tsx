@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import sideimg from '../image/42memory_folder_side.png';
 import fileimg from '../image/42memory_file.png';
 import DraggableWindow from '../common/DraggableWindow';
+import { Col, Container, Row } from 'react-bootstrap';
+import { getMessage } from '../api/message';
 
 const StyledDirectory = styled.div`
   width: 100%;
@@ -12,6 +14,10 @@ const StyledDirectory = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: start;
+    .container {
+      overflow: scroll;
+      overflow-x: hidden;
+    }
     .directory-side-image {
       width: 243px;
       height: 100%;
@@ -43,6 +49,7 @@ const StyledDirectory = styled.div`
         border-radius: 4px;
         cursor: pointer;
         img {
+          pointer-events: none;
           width: 90%;
           padding: 7px;
           border-radius: 4px;
@@ -69,11 +76,27 @@ const StyledDirectory = styled.div`
   }
 `;
 
-// interface DirectoryBlockProps {
-//   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-// }
+const DirectoryBlock: React.FC<any> = ({ setVisible, clickedMessages, setClickedMessages, messageFiles, setMessageData, messageData }: any) => {
+  const onMessage = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
+    const event = e.target as HTMLButtonElement;
+    const { dataset } = event;
 
-const DirectoryBlock: React.FC<any> = ({ setVisible, datas, messageData, setMessageData }: any) => {
+    if (messageData === null) {
+      const userClusterName = sessionStorage.getItem('userClusterName') as string;
+      const res = await getMessage(userClusterName);
+      setMessageData(res.messages);
+      console.log('res messages', res.messages);
+      console.log('dataset.id', dataset.id);
+      console.log(
+        'find',
+        res.messages.find((x: any) => x.messageID === dataset.id),
+      );
+      // setClickedMessages(res.messages.filter(x=>x.messageID === dataset.id))
+    } else {
+      // setClickedMessages([...clickedMessages, messageFiles.find((x: any) => x.messageID === dataset.id)]);
+    }
+  };
+
   return (
     <DraggableWindow
       width={1000}
@@ -87,18 +110,23 @@ const DirectoryBlock: React.FC<any> = ({ setVisible, datas, messageData, setMess
       <StyledDirectory>
         <div className="directory-content">
           <img src={sideimg} alt="sideimg" className="directory-side-image"></img>
-          <div className="file-page">
-            {datas.map((data: any) => (
-              <button className="file" onClick={() => setMessageData([...messageData, data])}>
-                <img src={fileimg} alt="file" />
-                <div className="file-name">{data.ClusterName}</div>
-              </button>
-            ))}
-          </div>
+          <Container>
+            <Row lg={6}>
+              {messageFiles.map((file: any, index: number) => (
+                <Col lg="auto" key={index}>
+                  <div className="file-page">
+                    <button className="file" onClick={onMessage} data-id={file.messageID}>
+                      <img src={fileimg} alt="file" />
+                      <div className="file-name">{file.senderNickname}</div>
+                    </button>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </Container>
         </div>
       </StyledDirectory>
     </DraggableWindow>
   );
 };
-
 export default DirectoryBlock;
