@@ -42,7 +42,7 @@ export const startRegister = async (code: string): Promise<any> => {
   return { info: info42, accessToken: res.data.access_token };
 };
 
-export const signUp = async (data: signUpData): Promise<void> =>
+export const signUp = async (data: signUpData): Promise<any> =>
   await client.post(`/${data.userClusterName}`, {
     accessToken: data.accessToken,
     userPassword: data.userPassword,

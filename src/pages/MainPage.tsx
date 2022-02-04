@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { getMessageNickname } from '../api/message';
+import { getMessage, getMessageNickname } from '../api/message';
 import DirectoryBlock from '../block/DirectoryBlock';
 import MessageBlock from '../block/MessageBlock';
 import folder from '../image/42memory_folder.png';
@@ -44,7 +44,7 @@ const MainPage: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [messageData, setMessageData] = useState<any[] | null>(null);
   const [messageFiles, setMessageFiles] = useState([]);
-  const [clickedMessages, setClickedMessages] = useState([]);
+  const [windowData, setWindowData] = useState(Array(5).fill(-1));
 
   useEffect(() => {
     void (async () => {
@@ -52,36 +52,42 @@ const MainPage: React.FC = () => {
       const res = await getMessageNickname(userClusterName);
       setMessageFiles(res.messages);
       console.log('messages', res.messages);
+      const messageRes = await getMessage(userClusterName);
+      setMessageData(messageRes.messages);
     })();
   }, []);
-  const deleteFromMessageData = useCallback(
-    (data: any) => {
-      if (messageData !== null) setMessageData(messageData.filter((x) => x !== data));
-    },
-    [messageData],
-  );
 
-  console.log('clicked', clickedMessages);
+  const deleteFromClickedMessages = useCallback(
+    (messageID: Number) => {
+      if (messageData !== null) {
+        const modified = windowData;
+        modified[modified.findIndex((x) => x === messageID)] = -1;
+        setWindowData(modified);
+      }
+    },
+    [messageData, windowData],
+  );
 
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'start', justifyContent: 'end' }}>
-      {visible && (
-        <DirectoryBlock
-          setVisible={setVisible}
-          clickedMessages={clickedMessages}
-          setClickedMessages={setClickedMessages}
-          messageFiles={messageFiles}
-          messageData={messageData}
-          setMessageData={setMessageData}
-        />
-      )}
+      {visible && <DirectoryBlock setVisible={setVisible} messageFiles={messageFiles} windowData={windowData} setWindowData={setWindowData} />}
       <StyledButton onClick={() => setVisible(true)}>
         <img src={folder} alt="folder image" />
         <p>Messages</p>
       </StyledButton>
-      {clickedMessages.length > 0 &&
-        clickedMessages.map((data, index) => {
-          return <MessageBlock key={index} data={data} deleteFromMessageData={deleteFromMessageData}></MessageBlock>;
+      {windowData.length > 0 &&
+        windowData.map((message: Number, index) => {
+          console.log(message);
+          if (message !== -1) {
+            return (
+              <MessageBlock
+                key={index}
+                data={messageData?.find((x: { messageID: Number; [key: string]: unknown }) => x.messageID === message)}
+                deleteFromClickedMessages={deleteFromClickedMessages}
+              ></MessageBlock>
+            );
+          }
+          return <MessageBlock key={index} data={null} deleteFromClickedMessages={deleteFromClickedMessages}></MessageBlock>;
         })}
     </div>
   );

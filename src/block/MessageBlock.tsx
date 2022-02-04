@@ -9,18 +9,19 @@ const StyledMessageBlock = styled.div`
   padding: 10px;
 `;
 
-const MessageBlock: React.FC<any> = ({ data, key, deleteFromMessageData }) => {
+const MessageBlock: React.FC<any> = ({ data, deleteFromClickedMessages }) => {
   return (
     <DraggableWindow
+      show={data !== null}
       title={`To. ${sessionStorage.getItem('userClusterName') ?? ''}`}
       width={800}
       height={600}
-      onHeaderButtonClick={() => deleteFromMessageData(data)}
+      onHeaderButtonClick={() => deleteFromClickedMessages(data.messageID)}
     >
-      <StyledMessageBlock key={key}>
-        <Card.Title as="h3">{data.messageTitle}</Card.Title>
-        <Card.Text>From. {data.senderNickname}</Card.Text>
-        <Card.Text>{data.messageText}</Card.Text>
+      <StyledMessageBlock>
+        <Card.Title as="h3">{data?.messageTitle}</Card.Title>
+        <Card.Text>From. {data?.senderNickname}</Card.Text>
+        <Card.Text>{data?.messageText}</Card.Text>
       </StyledMessageBlock>
     </DraggableWindow>
   );

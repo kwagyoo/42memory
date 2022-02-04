@@ -7,6 +7,7 @@ import sendimg from '../image/42memory_send_msg.png';
 import { ZindexContext } from '../module/Context';
 
 interface DraggableWindowProps {
+  show?: boolean;
   title: string;
   onHeaderButtonClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   children: JSX.Element;
@@ -15,6 +16,7 @@ interface DraggableWindowProps {
 }
 
 interface StyledWindowProps {
+  show: boolean;
   width: number;
   height: number;
   zindex: number;
@@ -27,7 +29,7 @@ const StyledWindow = styled.div`
   width: ${(props: StyledWindowProps) => `${props.width}px`};
   height: ${(props: StyledWindowProps) => `${props.height}px`};
   z-index: ${(props: StyledWindowProps) => `${props.zindex}`};
-  display: flex;
+  display: ${(props: StyledWindowProps) => (props.show ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
   justify-content: start;
@@ -94,7 +96,7 @@ const StyledWindow = styled.div`
     padding: 0;
   }
 `;
-const DraggableWindow: React.FC<DraggableWindowProps> = ({ title, width, height, onHeaderButtonClick, children }: DraggableWindowProps) => {
+const DraggableWindow: React.FC<DraggableWindowProps> = ({ show = true, title, width, height, onHeaderButtonClick, children }: DraggableWindowProps) => {
   const windowRef = useRef<any>(null);
 
   const startDrag = useCallback((e) => {
@@ -125,7 +127,7 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({ title, width, height,
 
   const { zIndex, addIndex } = useContext(ZindexContext);
   return (
-    <StyledWindow onClick={addIndex} width={width} height={height} ref={windowRef} zindex={zIndex}>
+    <StyledWindow onClick={addIndex} show={show} width={width} height={height} ref={windowRef} zindex={zIndex}>
       <Card>
         <Card.Header onMouseDown={startDrag}>
           <div className="header-content">

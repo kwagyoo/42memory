@@ -3,7 +3,6 @@ import sideimg from '../image/42memory_folder_side.png';
 import fileimg from '../image/42memory_file.png';
 import DraggableWindow from '../common/DraggableWindow';
 import { Col, Container, Row } from 'react-bootstrap';
-import { getMessage } from '../api/message';
 
 const StyledDirectory = styled.div`
   width: 100%;
@@ -76,24 +75,17 @@ const StyledDirectory = styled.div`
   }
 `;
 
-const DirectoryBlock: React.FC<any> = ({ setVisible, clickedMessages, setClickedMessages, messageFiles, setMessageData, messageData }: any) => {
+const DirectoryBlock: React.FC<any> = ({ setVisible, messageFiles, windowData, setWindowData }: any) => {
   const onMessage = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
     const event = e.target as HTMLButtonElement;
     const { dataset } = event;
 
-    if (messageData === null) {
-      const userClusterName = sessionStorage.getItem('userClusterName') as string;
-      const res = await getMessage(userClusterName);
-      setMessageData(res.messages);
-      console.log('res messages', res.messages);
-      console.log('dataset.id', dataset.id);
-      console.log(
-        'find',
-        res.messages.find((x: any) => x.messageID === dataset.id),
-      );
-      // setClickedMessages(res.messages.filter(x=>x.messageID === dataset.id))
-    } else {
-      // setClickedMessages([...clickedMessages, messageFiles.find((x: any) => x.messageID === dataset.id)]);
+    const unusedWindow = windowData.findIndex((x: Number) => x === -1);
+    if (unusedWindow !== -1) {
+      const modified = windowData;
+      modified[unusedWindow] = Number(dataset.id);
+      console.log(modified);
+      setWindowData(modified);
     }
   };
 
