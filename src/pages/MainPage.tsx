@@ -51,7 +51,6 @@ const MainPage: React.FC = () => {
       const userClusterName = sessionStorage.getItem('userClusterName') as string;
       const res = await getMessageNickname(userClusterName);
       setMessageFiles(res.messages);
-      console.log('messages', res.messages);
       const messageRes = await getMessage(userClusterName);
       setMessageData(messageRes.messages);
     })();
@@ -62,7 +61,7 @@ const MainPage: React.FC = () => {
       if (messageData !== null) {
         const modified = windowData;
         modified[modified.findIndex((x) => x === messageID)] = -1;
-        setWindowData(modified);
+        setWindowData([...modified]);
       }
     },
     [messageData, windowData],
@@ -75,20 +74,17 @@ const MainPage: React.FC = () => {
         <img src={folder} alt="folder image" />
         <p>Messages</p>
       </StyledButton>
-      {windowData.length > 0 &&
-        windowData.map((message: Number, index) => {
-          console.log(message);
-          if (message !== -1) {
-            return (
-              <MessageBlock
-                key={index}
-                data={messageData?.find((x: { messageID: Number; [key: string]: unknown }) => x.messageID === message)}
-                deleteFromClickedMessages={deleteFromClickedMessages}
-              ></MessageBlock>
-            );
-          }
-          return <MessageBlock key={index} data={null} deleteFromClickedMessages={deleteFromClickedMessages}></MessageBlock>;
-        })}
+      {windowData.map((message: Number, index) => {
+        if (message !== -1) {
+          return (
+            <MessageBlock
+              key={`on-${index}`}
+              data={messageData?.find((x: { messageID: Number; [key: string]: unknown }) => x.messageID === message)}
+              deleteFromClickedMessages={deleteFromClickedMessages}
+            ></MessageBlock>
+          );
+        } else return <MessageBlock key={`off-${index}`} data={null} deleteFromClickedMessages={deleteFromClickedMessages}></MessageBlock>;
+      })}
     </div>
   );
 };

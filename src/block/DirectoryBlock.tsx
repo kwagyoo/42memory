@@ -81,11 +81,11 @@ const DirectoryBlock: React.FC<any> = ({ setVisible, messageFiles, windowData, s
     const { dataset } = event;
 
     const unusedWindow = windowData.findIndex((x: Number) => x === -1);
-    if (unusedWindow !== -1) {
+    const duplicateWindow = windowData.findIndex((x: Number) => x === Number(dataset.id));
+    if (unusedWindow !== -1 && duplicateWindow === -1) {
       const modified = windowData;
       modified[unusedWindow] = Number(dataset.id);
-      console.log(modified);
-      setWindowData(modified);
+      setWindowData([...modified]);
     }
   };
 
