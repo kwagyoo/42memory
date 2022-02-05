@@ -1,13 +1,14 @@
-import { useCallback, useContext, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 import ButtonList from './ButtonList';
 import titleimg from '../image/42memory_folder_title_option.png';
 import sendimg from '../image/42memory_send_msg.png';
-import { ZindexContext } from '../module/Context';
 
 interface DraggableWindowProps {
   show?: boolean;
+  zIndex?: string;
+  setClickedWindow?: () => any;
   title: string;
   onHeaderButtonClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   children: JSX.Element;
@@ -19,7 +20,7 @@ interface StyledWindowProps {
   show: boolean;
   width: number;
   height: number;
-  zindex: number;
+  zIndex: string;
 }
 
 const StyledWindow = styled.div`
@@ -28,7 +29,7 @@ const StyledWindow = styled.div`
   top: 100px;
   width: ${(props: StyledWindowProps) => `${props.width}px`};
   height: ${(props: StyledWindowProps) => `${props.height}px`};
-  z-index: ${(props: StyledWindowProps) => `${props.zindex}`};
+  z-index: ${(props: StyledWindowProps) => props.zIndex};
   display: ${(props: StyledWindowProps) => (props.show ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
@@ -96,7 +97,16 @@ const StyledWindow = styled.div`
     padding: 0;
   }
 `;
-const DraggableWindow: React.FC<DraggableWindowProps> = ({ show = true, title, width, height, onHeaderButtonClick, children }: DraggableWindowProps) => {
+const DraggableWindow: React.FC<DraggableWindowProps> = ({
+  show = true,
+  zIndex = 'auto',
+  setClickedWindow,
+  title,
+  width,
+  height,
+  onHeaderButtonClick,
+  children,
+}: DraggableWindowProps) => {
   const windowRef = useRef<any>(null);
 
   const startDrag = useCallback((e) => {
@@ -125,9 +135,8 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({ show = true, title, w
     refDiv.addEventListener('mouseup', () => refDiv.removeEventListener('mousemove', moveDrag));
   }, []);
 
-  const { zIndex, addIndex } = useContext(ZindexContext);
   return (
-    <StyledWindow onClick={addIndex} show={show} width={width} height={height} ref={windowRef} zindex={zIndex}>
+    <StyledWindow onMouseDown={setClickedWindow} show={show} width={width} height={height} ref={windowRef} zIndex={zIndex}>
       <Card>
         <Card.Header onMouseDown={startDrag}>
           <div className="header-content">

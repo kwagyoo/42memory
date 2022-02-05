@@ -45,6 +45,7 @@ const MainPage: React.FC = () => {
   const [messageData, setMessageData] = useState<any[] | null>(null);
   const [messageFiles, setMessageFiles] = useState([]);
   const [windowData, setWindowData] = useState(Array(5).fill(-1));
+  const [clickedWindow, setClickedWindow] = useState<string>('');
 
   useEffect(() => {
     void (async () => {
@@ -80,6 +81,8 @@ const MainPage: React.FC = () => {
             <MessageBlock
               key={`on-${index}`}
               data={messageData?.find((x: { messageID: Number; [key: string]: unknown }) => x.messageID === message)}
+              clickedWindow={clickedWindow}
+              setClickedWindow={setClickedWindow}
               deleteFromClickedMessages={deleteFromClickedMessages}
             ></MessageBlock>
           );
