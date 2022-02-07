@@ -6,7 +6,7 @@ import { signIn, SignInFetch } from '../api/auth';
 import { useNavigate } from 'react-router';
 import client from '../api/client';
 
-const LoginDiv = styled.div`
+export const LoginDiv = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
@@ -40,6 +40,12 @@ const LoginDiv = styled.div`
     }
     .login-additional-btn:hover {
       color: #9f9f9f;
+    }
+  }
+  .message-login {
+    .btn-secondary {
+      background-color: #6c757d !important;
+      border-color: #6c757d !important;
     }
   }
 `;

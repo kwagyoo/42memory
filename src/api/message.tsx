@@ -16,3 +16,21 @@ export const getMessage = async (userClusterName: string): Promise<FetchMessage>
   const res = await client.get(`/${userClusterName}/message`);
   return res.data;
 };
+
+interface messageData {
+  code: string;
+  userClusterName: string;
+  senderNickname: string;
+  messageTitle: string;
+  messageText: string;
+}
+
+export const sendMessage = async (data: messageData): Promise<FetchMessage> => {
+  const res = await client.post(`/${data.userClusterName}/message`, {
+    code: data.code,
+    senderNickname: data.senderNickname,
+    messageTitle: data.messageTitle,
+    messageText: data.messageText,
+  });
+  return res.data;
+};

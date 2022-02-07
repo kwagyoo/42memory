@@ -144,7 +144,7 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({
             <div className="header-title">{title}</div>
             {title === 'Send a message' && (
               <>
-                <button className="send-button">
+                <button className="send-button" form="send-message" type="submit">
                   <img src={sendimg} alt="sendimg" />
                 </button>
               </>
