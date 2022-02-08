@@ -14,8 +14,9 @@ const MessageBlock: React.FC<any> = ({ data, clickedWindow, setClickedWindow, de
   const [name, setName] = useState<string>('');
 
   useLayoutEffect(() => {
-    if (data !== null) setName(`message ${data.messageID}`);
-    else setName('');
+    if (data !== null) {
+      setName(`message ${data.messageID}`);
+    } else setName('');
   }, [data]);
 
   return (
@@ -31,7 +32,7 @@ const MessageBlock: React.FC<any> = ({ data, clickedWindow, setClickedWindow, de
       <StyledMessageBlock>
         <Card.Title as="h3">{data?.messageTitle}</Card.Title>
         <Card.Text>From. {data?.senderNickname}</Card.Text>
-        <Card.Text>{data?.messageText}</Card.Text>
+        <div style={{ whiteSpace: 'pre-wrap' }}>{data?.messageText}</div>
       </StyledMessageBlock>
     </DraggableWindow>
   );

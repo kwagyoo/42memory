@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { getUserClusterName, sendMessage } from '../api/message';
 import DraggableWindow from '../common/DraggableWindow';
@@ -23,6 +23,7 @@ const MessageWriteBlock: React.FC = () => {
   const params = useParams();
   const [userName, setUserName] = useState('');
   const [code, setCode] = useState('');
+  const navigate = useNavigate();
   useEffect(() => {
     void (async () => {
       if (params.userID !== undefined) {
@@ -46,8 +47,14 @@ const MessageWriteBlock: React.FC = () => {
       messageTitle: messageTitle.value,
       messageText: messageTextview.value,
     };
-    const res = await sendMessage(data);
-    console.log(res);
+    try {
+      const res = await sendMessage(data);
+      console.log(res);
+    } catch (e) {
+      if (params.userID !== undefined) {
+        navigate(`/message/${params.userID}`);
+      }
+    }
   };
 
   return (
