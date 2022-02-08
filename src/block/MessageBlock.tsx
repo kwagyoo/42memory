@@ -8,6 +8,11 @@ const StyledMessageBlock = styled.div`
   width: 100%;
   height: 100%;
   padding: 10px;
+  overflow-y: auto;
+  .message-text {
+    white-space: pre-wrap;
+    height: 460px;
+  }
 `;
 
 const MessageBlock: React.FC<any> = ({ data, clickedWindow, setClickedWindow, deleteFromClickedMessages }) => {
@@ -32,7 +37,7 @@ const MessageBlock: React.FC<any> = ({ data, clickedWindow, setClickedWindow, de
       <StyledMessageBlock>
         <Card.Title as="h3">{data?.messageTitle}</Card.Title>
         <Card.Text>From. {data?.senderNickname}</Card.Text>
-        <div style={{ whiteSpace: 'pre-wrap' }}>{data?.messageText}</div>
+        <div className="message-text">{data?.messageText}</div>
       </StyledMessageBlock>
     </DraggableWindow>
   );
