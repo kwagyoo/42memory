@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 import { getMessage, getMessageNickname } from '../api/message';
 import DirectoryBlock from '../block/DirectoryBlock';
 import MessageBlock from '../block/MessageBlock';
-import MessageWriteBlock from '../block/MessageWriteBlock';
+// import MessageWriteBlock from '../block/MessageWriteBlock';
 import folder from '../image/42memory_folder.png';
 
 const StyledButton = styled.button`
@@ -42,6 +43,7 @@ const StyledButton = styled.button`
 `;
 
 const MainPage: React.FC = () => {
+  const params = useParams();
   const [visible, setVisible] = useState(false);
   const [messageData, setMessageData] = useState<any[] | null>(null);
   const [messageFiles, setMessageFiles] = useState([]);
@@ -50,10 +52,9 @@ const MainPage: React.FC = () => {
 
   useEffect(() => {
     void (async () => {
-      const userClusterName = sessionStorage.getItem('userClusterName') as string;
-      const res = await getMessageNickname(userClusterName);
+      const res = await getMessageNickname(params.userID ?? '');
       setMessageFiles(res.messages);
-      const messageRes = await getMessage(userClusterName);
+      const messageRes = await getMessage(params.userID ?? '');
       setMessageData(messageRes.messages);
     })();
   }, []);
@@ -76,7 +77,7 @@ const MainPage: React.FC = () => {
         <img src={folder} alt="folder image" />
         <p>Messages</p>
       </StyledButton>
-      <MessageWriteBlock />
+      {/* <MessageWriteBlock /> */}
       {windowData.map((message: Number, index) => {
         if (message !== -1) {
           return (

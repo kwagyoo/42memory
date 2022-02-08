@@ -41,7 +41,7 @@ const MessageWriteBlock: React.FC = () => {
     const { messageTitle, messageNickname, messageTextview } = e.currentTarget;
     const data = {
       code: code,
-      userClusterName: userName,
+      userID: params.userID ?? '',
       senderNickname: messageNickname.value,
       messageTitle: messageTitle.value,
       messageText: messageTextview.value,

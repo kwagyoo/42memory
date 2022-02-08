@@ -43,16 +43,18 @@ export const startRegister = async (code: string): Promise<any> => {
 };
 
 export const signUp = async (data: signUpData): Promise<any> =>
-  await client.post(`/${data.userClusterName}`, {
+  await client.post('/user', {
     accessToken: data.accessToken,
+    userClusterName: data.userClusterName,
     userPassword: data.userPassword,
     userDeadline: data.userDeadline,
     userEmail: data.userEmail,
   });
 
 export const signIn = async (data: signInData): Promise<SignInFetch> => {
-  const res = await client.get(`/${data.userClusterName}`, {
+  const res = await client.get('/user', {
     params: {
+      userClusterName: data.userClusterName,
       userPassword: data.userPassword,
     },
   });
