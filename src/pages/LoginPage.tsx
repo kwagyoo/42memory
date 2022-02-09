@@ -1,8 +1,14 @@
-import { Form, Image } from 'react-bootstrap';
+import { Form, Image, Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 import image42 from '../image/42memory_title.png';
+import { BsArrowRightCircle } from 'react-icons/bs';
+import { signIn, SignInFetch } from '../api/auth';
+import { useNavigate } from 'react-router';
+import client from '../api/client';
+import { useState } from 'react';
+import { useSpring, animated } from 'react-spring';
 
-const LoginDiv = styled.div`
+export const LoginDiv = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
@@ -27,6 +33,7 @@ const LoginDiv = styled.div`
     display: flex;
     flex-direction: column;
     .login-additional-btn {
+      width: 100%;
       font-size: 15px;
       background-color: transparent;
       border: none;
@@ -35,6 +42,12 @@ const LoginDiv = styled.div`
     }
     .login-additional-btn:hover {
       color: #9f9f9f;
+    }
+  }
+  .message-login {
+    .btn-secondary {
+      background-color: #6c757d !important;
+      border-color: #6c757d !important;
     }
   }
 `;
@@ -58,25 +71,90 @@ const CustomForm = styled(Form)`
       box-shadow: none !important;
     }
   }
+  .input-div {
+    position: relative;
+    .submit-btn {
+      position: absolute;
+      left: 170px;
+      top: 3px;
+      width: 30px;
+    }
+    .submit-icon {
+      width: 100%;
+      cursor: pointer;
+      color: white;
+    }
+    .spinner-border {
+      position: absolute;
+      left: 175px;
+      top: 10px;
+    }
+  }
 `;
 
 const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [loginTry, setLoginTry] = useState(false);
+  const styles = useSpring({
+    from: { x: 0 },
+    to: [{ x: -5 }, { x: 5 }, { x: -5 }, { x: 5 }, { x: 0 }],
+    config: {
+      mass: 1,
+      tension: 500,
+      friction: 5,
+      duration: 100,
+    },
+  });
+
+  const URL = process.env.REACT_APP_REGISTER_URL;
+  const onLogin: React.FormEventHandler<HTMLFormElement> = async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
+    e.preventDefault();
+    const { inputId, inputPassword } = e.currentTarget;
+    const data = { userClusterName: inputId.value, userPassword: inputPassword.value };
+    if (loading) return;
+    try {
+      setLoading(true);
+      setLoginTry(true);
+      const res: SignInFetch = await signIn(data);
+      sessionStorage.setItem('accessToken', res.accessToken);
+      sessionStorage.setItem('userID', res.userID);
+      sessionStorage.setItem('userClusterName', res.userClusterName);
+      // eslint-disable-next-line @typescript-eslint/dot-notation
+      client.defaults.headers.common['Authorization'] = `Bearer ${res.accessToken}`;
+      navigate(`/mainPage/${res.userID}`);
+    } catch (e: any) {
+      setLoading(false);
+      console.log(e.response);
+    }
+  };
   return (
     <LoginDiv>
-      <div className="test">
+      <div>
         <div className="thumbnail-42">
           <Image src={image42} />
         </div>
-        <CustomForm className="row g-3">
-          <div className="col-md-12 col-lg-12">
-            <Form.Control type="email" className="form-control" id="inputId" placeholder="아이디를 입력" />
-          </div>
-          <div className="col-md-12 col-lg-12">
-            <Form.Control type="password" className="form-control" id="inputPassword" placeholder="암호 입력" />
-          </div>
-        </CustomForm>
+        <animated.div style={loginTry && !loading ? styles : {}}>
+          <CustomForm className="row g-3" onSubmit={onLogin}>
+            <div className="col-md-12 col-lg-12">
+              <Form.Control type="text" className="form-control" id="inputId" placeholder="아이디를 입력" />
+            </div>
+            <div className="input-div">
+              <Form.Control type="password" className="form-control" id="inputPassword" placeholder="암호 입력" />
+              {loading ? (
+                <Spinner animation="border" size="sm" />
+              ) : (
+                <button className="submit-btn" type="submit">
+                  <BsArrowRightCircle className="submit-icon" />
+                </button>
+              )}
+            </div>
+          </CustomForm>
+        </animated.div>
         <div className="login-addtional">
-          <button className="login-additional-btn">회원가입</button>
+          <a href={URL}>
+            <button className="login-additional-btn">회원가입</button>
+          </a>
           <button className="login-additional-btn">비밀번호를 잊으셨나요?</button>
         </div>
       </div>

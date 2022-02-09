@@ -21,6 +21,8 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src",
+	".eslintrc.js", // ESLint's config must be included
+
   ]
 }

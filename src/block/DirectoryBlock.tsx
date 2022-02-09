@@ -1,49 +1,35 @@
 import styled from 'styled-components';
 import sideimg from '../image/42memory_folder_side.png';
-import titleimg from '../image/42memory_folder_title_option.png';
 import fileimg from '../image/42memory_file.png';
-import ButtonList from '../common/ButtonList';
+import DraggableWindow from '../common/DraggableWindow';
+import { Col, Container, Row } from 'react-bootstrap';
+
 const StyledDirectory = styled.div`
-  position: absolute;
-  left: 100px;
-  top: 100px;
-  width: 1000px;
-  height: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  border-radius: 8px;
-  border: 1px solid #beb5b4;
-  background-color: #eeeeee;
-  .title-option-image {
-    width: 100%;
-    height: 45px;
-  }
-  .directory-header {
-    display: flex;
-    flex-direction: column;
-    .directory-header-content {
-      display: flex;
-      flex-direction: row;
-      .directory-header-title {
-        flex: 1;
-        text-align: center;
-      }
-    }
-  }
+  width: 100%;
+  height: 100%;
   .directory-content {
     width: 100%;
     height: 730px;
     display: flex;
     flex-direction: row;
     justify-content: start;
+    .container {
+      overflow: scroll;
+      overflow-x: hidden;
+    }
     .directory-side-image {
       width: 243px;
       height: 100%;
       border-radius: 0 0 0 8px;
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
+      user-drag: none;
     }
     .file-page {
+      display: flex;
+      flex-direction: row;
       background-color: white;
       width: 100%;
       height: 100%;
@@ -54,12 +40,15 @@ const StyledDirectory = styled.div`
       .file {
         width: 80px;
         height: 110px;
+        margin: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         border-radius: 4px;
+        cursor: pointer;
         img {
+          pointer-events: none;
           width: 90%;
           padding: 7px;
           border-radius: 4px;
@@ -86,36 +75,50 @@ const StyledDirectory = styled.div`
   }
 `;
 
-interface DirectoryBlockProps {
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
+const DirectoryBlock: React.FC<any> = ({ setVisible, messageFiles, windowData, setWindowData }: any) => {
+  const onMessage = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
+    const event = e.target as HTMLButtonElement;
+    const { dataset } = event;
 
-const DirectoryBlock: React.FC<DirectoryBlockProps> = ({ setVisible }: DirectoryBlockProps) => {
+    const unusedWindow = windowData.findIndex((x: Number) => x === -1);
+    const duplicateWindow = windowData.findIndex((x: Number) => x === Number(dataset.id));
+    if (unusedWindow !== -1 && duplicateWindow === -1) {
+      const modified = windowData;
+      modified[unusedWindow] = Number(dataset.id);
+      setWindowData([...modified]);
+    }
+  };
+
   return (
-    <StyledDirectory>
-      <div className="directory-header">
-        <div className="directory-header-content">
-          <ButtonList
-            onClick={() => {
-              console.log('hello');
-              setVisible(false);
-            }}
-          />
-          <div className="directory-header-title">Messages</div>
+    <DraggableWindow
+      width={1000}
+      height={800}
+      title="Messages"
+      onHeaderButtonClick={(e) => {
+        e.preventDefault();
+        setVisible(false);
+      }}
+    >
+      <StyledDirectory>
+        <div className="directory-content">
+          <img src={sideimg} alt="sideimg" className="directory-side-image"></img>
+          <Container>
+            <Row lg={6}>
+              {messageFiles.map((file: any, index: number) => (
+                <Col lg="auto" key={index}>
+                  <div className="file-page">
+                    <button className="file" onClick={onMessage} data-id={file.messageID}>
+                      <img src={fileimg} alt="file" />
+                      <div className="file-name">{file.senderNickname}</div>
+                    </button>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </Container>
         </div>
-        <img src={titleimg} alt="titleimg" className="title-option-image"></img>
-      </div>
-      <div className="directory-content">
-        <img src={sideimg} alt="sideimg" className="directory-side-image"></img>
-        <div className="file-page">
-          <button className="file">
-            <img src={fileimg} alt="file" />
-            <div className="file-name">name</div>
-          </button>
-        </div>
-      </div>
-    </StyledDirectory>
+      </StyledDirectory>
+    </DraggableWindow>
   );
 };
-
 export default DirectoryBlock;

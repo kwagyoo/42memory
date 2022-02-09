@@ -1,47 +1,45 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+import { useLayoutEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
-import ButtonList from '../common/ButtonList';
+import DraggableWindow from '../common/DraggableWindow';
 
-const StyledMessage = styled.div`
-  width: 600px;
-  height: 600px;
-  .card {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-  }
-  .card-header {
-    display: flex;
-    flex: 0 0 30px;
-    width: 100%;
-    flex-direction: row;
-    padding: 0.1rem 0;
-    .message-header-title {
-      flex: 1;
-      text-align: center;
-      font-size: 18px;
-    }
-  }
-  .card-body {
-    width: 100%;
-    flex: 1 0;
+const StyledMessageBlock = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  overflow-y: auto;
+  .message-text {
+    white-space: pre-wrap;
+    height: 460px;
   }
 `;
 
-const MessageBlock: React.FC = () => {
+const MessageBlock: React.FC<any> = ({ data, clickedWindow, setClickedWindow, deleteFromClickedMessages }) => {
+  const [name, setName] = useState<string>('');
+
+  useLayoutEffect(() => {
+    if (data !== null) {
+      setName(`message ${data.messageID}`);
+    } else setName('');
+  }, [data]);
+
   return (
-    <StyledMessage>
-      <Card>
-        <Card.Header>
-          <ButtonList />
-          <div className="message-header-title">from Hyunyoo</div>
-        </Card.Header>
-        <Card.Body>
-          <Card.Title as="h5">제목</Card.Title>
-          <Card.Text>텍스트 내용</Card.Text>
-        </Card.Body>
-      </Card>
-    </StyledMessage>
+    <DraggableWindow
+      show={data !== null}
+      zIndex={name === clickedWindow ? '10000' : 'auto'}
+      title={`To. ${sessionStorage.getItem('userClusterName') ?? ''}`}
+      width={800}
+      height={600}
+      setClickedWindow={() => setClickedWindow(name)}
+      onHeaderButtonClick={() => deleteFromClickedMessages(data.messageID)}
+    >
+      <StyledMessageBlock>
+        <Card.Title as="h3">{data?.messageTitle}</Card.Title>
+        <Card.Text>From. {data?.senderNickname}</Card.Text>
+        <div className="message-text">{data?.messageText}</div>
+      </StyledMessageBlock>
+    </DraggableWindow>
   );
 };
 

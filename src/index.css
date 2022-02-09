@@ -23,3 +23,11 @@ button, input {
     border: none !important;
     background-color: transparent !important;
 }
+
+*, ::before, ::after{
+  box-sizing: border-box;
+}
+
+::-ms-reveal {
+  display: none;
+}

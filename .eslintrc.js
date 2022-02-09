@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/semi': 'off',
     '@typescript-eslint/space-before-function-paren': 'off',
+    '@typescript-eslint/return-await': 'off',
     'prettier/prettier': [
       'error',
       {
