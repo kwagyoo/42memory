@@ -1,10 +1,12 @@
-import { Form, Image } from 'react-bootstrap';
+import { Form, Image, Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 import image42 from '../image/42memory_title.png';
 import { BsArrowRightCircle } from 'react-icons/bs';
 import { signIn, SignInFetch } from '../api/auth';
 import { useNavigate } from 'react-router';
 import client from '../api/client';
+import { useState } from 'react';
+import { useSpring, animated } from 'react-spring';
 
 export const LoginDiv = styled.div`
   position: absolute;
@@ -69,7 +71,7 @@ const CustomForm = styled(Form)`
       box-shadow: none !important;
     }
   }
-  .inputDiv {
+  .input-div {
     position: relative;
     .submit-btn {
       position: absolute;
@@ -82,18 +84,38 @@ const CustomForm = styled(Form)`
       cursor: pointer;
       color: white;
     }
+    .spinner-border {
+      position: absolute;
+      left: 175px;
+      top: 10px;
+    }
   }
 `;
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [loginTry, setLoginTry] = useState(false);
+  const styles = useSpring({
+    from: { x: 0 },
+    to: [{ x: -5 }, { x: 5 }, { x: -5 }, { x: 5 }, { x: 0 }],
+    config: {
+      mass: 1,
+      tension: 500,
+      friction: 5,
+      duration: 100,
+    },
+  });
 
   const URL = process.env.REACT_APP_REGISTER_URL;
   const onLogin: React.FormEventHandler<HTMLFormElement> = async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
     e.preventDefault();
     const { inputId, inputPassword } = e.currentTarget;
     const data = { userClusterName: inputId.value, userPassword: inputPassword.value };
+    if (loading) return;
     try {
+      setLoading(true);
+      setLoginTry(true);
       const res: SignInFetch = await signIn(data);
       sessionStorage.setItem('accessToken', res.accessToken);
       sessionStorage.setItem('userID', res.userID);
@@ -102,6 +124,7 @@ const LoginPage: React.FC = () => {
       client.defaults.headers.common['Authorization'] = `Bearer ${res.accessToken}`;
       navigate(`/mainPage/${res.userID}`);
     } catch (e: any) {
+      setLoading(false);
       console.log(e.response);
     }
   };
@@ -111,17 +134,23 @@ const LoginPage: React.FC = () => {
         <div className="thumbnail-42">
           <Image src={image42} />
         </div>
-        <CustomForm className="row g-3" onSubmit={onLogin}>
-          <div className="col-md-12 col-lg-12">
-            <Form.Control type="text" className="form-control" id="inputId" placeholder="아이디를 입력" />
-          </div>
-          <div className="inputDiv">
-            <Form.Control type="password" className="form-control" id="inputPassword" placeholder="암호 입력" />
-            <button className="submit-btn" type="submit">
-              <BsArrowRightCircle className="submit-icon" />
-            </button>
-          </div>
-        </CustomForm>
+        <animated.div style={loginTry && !loading ? styles : {}}>
+          <CustomForm className="row g-3" onSubmit={onLogin}>
+            <div className="col-md-12 col-lg-12">
+              <Form.Control type="text" className="form-control" id="inputId" placeholder="아이디를 입력" />
+            </div>
+            <div className="input-div">
+              <Form.Control type="password" className="form-control" id="inputPassword" placeholder="암호 입력" />
+              {loading ? (
+                <Spinner animation="border" size="sm" />
+              ) : (
+                <button className="submit-btn" type="submit">
+                  <BsArrowRightCircle className="submit-icon" />
+                </button>
+              )}
+            </div>
+          </CustomForm>
+        </animated.div>
         <div className="login-addtional">
           <a href={URL}>
             <button className="login-additional-btn">회원가입</button>

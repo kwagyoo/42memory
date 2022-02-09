@@ -24,6 +24,10 @@ button, input {
     background-color: transparent !important;
 }
 
+*, ::before, ::after{
+  box-sizing: border-box;
+}
+
 ::-ms-reveal {
   display: none;
 }
