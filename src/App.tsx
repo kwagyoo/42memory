@@ -5,11 +5,11 @@ import { Route, Routes } from 'react-router';
 import Header from './common/Header';
 import MainPage from './pages/MainPage';
 import RegisterPage from './pages/RegisterPage';
-import ZindexProvider from './module/Context';
 import LoginPage from './pages/LoginPage';
 import WritePage from './pages/WritePage';
 import MessageLoginPage from './pages/MessageLoginPage';
 import RedirectPage from './pages/RedirectPage';
+import ErrorContextProvider from './module/Context';
 
 const BackgroundDiv = styled.div`
   background-image: url(${WallpaperImg});
@@ -26,7 +26,7 @@ const App: React.VFC = () => {
   return (
     <BackgroundDiv>
       <Header />
-      <ZindexProvider>
+      <ErrorContextProvider>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/mainPage/:userID" element={<MainPage />} />
@@ -35,7 +35,7 @@ const App: React.VFC = () => {
           <Route path="/message/:userID/write" element={<WritePage />} />
           <Route path="/message/:userID" element={<MessageLoginPage />} />
         </Routes>
-      </ZindexProvider>
+      </ErrorContextProvider>
     </BackgroundDiv>
   );
 };

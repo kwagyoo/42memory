@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { getUserClusterName, sendMessage } from '../api/message';
 import DraggableWindow from '../common/DraggableWindow';
 import qs from 'qs';
+import { ErrorContext } from '../module/Context';
 
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -24,16 +25,28 @@ const MessageWriteBlock: React.FC = () => {
   const [userName, setUserName] = useState('');
   const [code, setCode] = useState('');
   const navigate = useNavigate();
+  const { setError, setErrorText } = useContext(ErrorContext);
+
   useEffect(() => {
     void (async () => {
-      if (params.userID !== undefined) {
-        const user = await getUserClusterName(params.userID);
-        setUserName(user.data.userClusterName);
+      try {
+        if (params.userID !== undefined) {
+          const user = await getUserClusterName(params.userID);
+          setUserName(user.data.userClusterName);
+        }
+        const query = qs.parse(location.search, {
+          ignoreQueryPrefix: true,
+        });
+        setCode(query.code?.toString() ?? '');
+      } catch (err) {
+        if (params.userID !== undefined) {
+          alert('유효하지 않는 주소입니다. 홈페이지로 이동합니다.');
+          navigate('/');
+        } else {
+          alert('서버 문제가 발생했습니다. 다시 시도해주세요');
+          navigate(`/message/${params.userID ?? ''}`);
+        }
       }
-      const query = qs.parse(location.search, {
-        ignoreQueryPrefix: true,
-      });
-      setCode(query.code?.toString() ?? '');
     })();
   }, []);
 
@@ -54,6 +67,8 @@ const MessageWriteBlock: React.FC = () => {
       if (params.userID !== undefined) {
         navigate(`/message/${params.userID}`);
       }
+      setError(true);
+      setErrorText('메세지 전송에 실패했습니다');
     }
   };
 

@@ -1,5 +1,5 @@
 import QueryString from 'qs';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
 import { Formik } from 'formik';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import { signUp, startRegister } from '../api/auth';
 import image42 from '../image/42memory_title.png';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
+import { ErrorContext } from '../module/Context';
 
 const StyledRegister = styled.div`
   width: 800px;
@@ -130,6 +131,7 @@ const RegisterBlock: React.FC = () => {
     userPassword: '',
     accessToken: '',
   });
+  const { setError, setErrorText } = useContext(ErrorContext);
 
   const onRegister = useCallback(async (values: FormValues & userProps): Promise<void> => {
     try {
@@ -137,7 +139,8 @@ const RegisterBlock: React.FC = () => {
       console.log(res);
       navigate('/');
     } catch (e: any) {
-      alert('오류 발생!');
+      setError(true);
+      setErrorText('회원가입에 실패했습니다.');
     }
   }, []);
 
@@ -155,6 +158,8 @@ const RegisterBlock: React.FC = () => {
       });
     } catch (e) {
       console.log(e);
+      alert('유저 정보를 가져올 수 없습니다.');
+      navigate('/');
     }
   };
 

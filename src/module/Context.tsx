@@ -1,17 +1,24 @@
-import { createContext, useState } from 'react';
+import React, { createContext, Dispatch, SetStateAction, useMemo, useState } from 'react';
 
-export const ZindexContext = createContext({
-  zIndex: 0,
-  addIndex: () => {},
+interface ErrorContextProps {
+  error: boolean;
+  errorText: string;
+  setError: Dispatch<SetStateAction<boolean>>;
+  setErrorText: (text: string) => void;
+}
+
+export const ErrorContext = createContext<ErrorContextProps>({
+  error: true,
+  errorText: '',
+  setError: () => {},
+  setErrorText: () => {},
 });
 
-const ZindexProvider: React.FC = ({ children }: { children?: React.ReactNode }) => {
-  const [zIndex, setzIndex] = useState(0);
+const ErrorContextProvider: React.FC<React.ReactNode> = ({ children }) => {
+  const [error, setError] = useState(true);
+  const [errorText, setErrorText] = useState('');
 
-  const addIndex = (): void => setzIndex(zIndex + 1);
-
-  const value = { zIndex, addIndex };
-  return <ZindexContext.Provider value={value}>{children}</ZindexContext.Provider>;
+  const value = useMemo(() => ({ error, setError, errorText, setErrorText }), [error, setError, errorText, setErrorText]);
+  return <ErrorContext.Provider value={value}>{children}</ErrorContext.Provider>;
 };
-
-export default ZindexProvider;
+export default ErrorContextProvider;

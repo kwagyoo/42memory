@@ -97,6 +97,7 @@ const StyledWindow = styled.div`
     padding: 0;
   }
 `;
+
 const DraggableWindow: React.FC<DraggableWindowProps> = ({
   show = true,
   zIndex = 'auto',
@@ -136,11 +137,11 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({
   }, []);
 
   return (
-    <StyledWindow onMouseDown={setClickedWindow} show={show} width={width} height={height} ref={windowRef} zIndex={zIndex}>
+    <StyledWindow className="draggable-window" onMouseDown={setClickedWindow} show={show} width={width} height={height} ref={windowRef} zIndex={zIndex}>
       <Card>
         <Card.Header onMouseDown={startDrag}>
           <div className="header-content">
-            <ButtonList onClick={onHeaderButtonClick} />
+            {title !== '' && <ButtonList onClick={onHeaderButtonClick} />}
             <div className="header-title">{title}</div>
             {title === 'Send a message' && (
               <>

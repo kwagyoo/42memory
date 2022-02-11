@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { getMessage, getMessageNickname } from '../api/message';
 import DirectoryBlock from '../block/DirectoryBlock';
 import MessageBlock from '../block/MessageBlock';
+import CautionWindow from '../common/CautionWindow';
 import LoadingModal from '../common/LoadingModal';
-// import MessageWriteBlock from '../block/MessageWriteBlock';
 import folder from '../image/42memory_folder.png';
 
 const StyledButton = styled.button`
@@ -85,7 +85,6 @@ const MainPage: React.FC = () => {
           <img src={folder} alt="folder image" />
           <p>Messages</p>
         </StyledButton>
-        {/* <MessageWriteBlock /> */}
         {windowData.map((message: Number, index) => {
           if (message !== -1) {
             return (
@@ -99,6 +98,7 @@ const MainPage: React.FC = () => {
             );
           } else return <MessageBlock key={`off-${index}`} data={null} deleteFromClickedMessages={deleteFromClickedMessages}></MessageBlock>;
         })}
+        <CautionWindow />
       </div>
     </>
   );
