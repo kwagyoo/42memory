@@ -53,17 +53,33 @@ const MainPage: React.FC = () => {
   const [clickedWindow, setClickedWindow] = useState<string>('');
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    void (async () => {
+  const getMessages = useCallback(async () => {
+    try {
       setMessageLoading(true);
       const messageRes = await getMessage(params.userID ?? '');
       setMessageData(messageRes);
-      const res = await getMessageNickname(params.userID ?? '');
-      setMessageFiles(res);
+      sessionStorage.setItem('messages', JSON.stringify(messageRes));
+      const simpleMessageRes = await getMessageNickname(params.userID ?? '');
+      setMessageFiles(simpleMessageRes);
+      sessionStorage.setItem('simpleMessages', JSON.stringify(simpleMessageRes));
       setTimeout(() => {
         setMessageLoading(false);
       }, 1000);
-    })();
+    } catch (err) {
+      console.error(err);
+      alert('오류가 발생하였습니다.');
+    }
+  }, []);
+
+  useEffect(() => {
+    const simpleMessages = sessionStorage.getItem('simpleMessages');
+    const messages = sessionStorage.getItem('messages');
+    if (simpleMessages === null || messages === null) {
+      void getMessages();
+    } else {
+      setMessageData(JSON.parse(messages));
+      setMessageFiles(JSON.parse(simpleMessages));
+    }
   }, []);
 
   const deleteFromClickedMessages = useCallback(

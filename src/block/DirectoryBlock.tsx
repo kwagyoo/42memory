@@ -100,6 +100,8 @@ const DirectoryBlock: React.FC<DirectoryProps> = ({ setVisible, messageFiles, wi
     }
   };
 
+  console.log(messageFiles);
+
   return (
     <DraggableWindow
       width={1000}

@@ -1,8 +1,11 @@
 import { AxiosResponse } from 'axios';
-import { MessageData, resData, SendMessageData, SimpleMessageData } from '../types/types';
+import { MessageData, SendMessageData, SimpleMessageData } from '../types/types';
 import client from './client';
 
-export const getUserClusterName = async (userID: string): Promise<resData> => await client.get(`/user/${userID}/name`);
+export const getUserClusterName = async (userID: string): Promise<string> => {
+  const res = await client.get(`/user/${userID}/name`);
+  return res.data.userClusterName;
+};
 
 export const getMessageNickname = async (userID: string): Promise<SimpleMessageData[]> => {
   const res = await client.get(`/user/${userID}/message/simple`);

@@ -6,8 +6,9 @@ import copyImg from '../image/42memory_copy.png';
 import wifiImg from '../image/Wifi.png';
 import battery from '../image/Battery.png';
 import setting from '../image/Setting.png';
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import HeaderWatchBlock from '../block/HeaderWatchBlock';
+import { useCallback, useEffect, useState } from 'react';
 
 const StyledDropdown = styled.div`
   height: 100%;
@@ -114,32 +115,18 @@ const StyledHeader = styled.div`
 `;
 
 const Header: React.FC = () => {
-  const [nowTime, setNowTime] = useState('');
   const navigate = useNavigate();
-  useEffect(() => {
-    const watchInterval = setInterval(() => {
-      const week = ['일', '월', '화', '수', '목', '금', '토'];
-      const date = new Date();
-      const month = date.getMonth();
-      const clockDate = date.getDate();
-      const day = date.getDay();
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      const seconds = date.getSeconds();
-      const nowTime =
-        `${month + 1}월 ${clockDate}일 (${week[day]})` +
-        `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
-      setNowTime(nowTime);
-    }, 1000);
-    return () => {
-      clearInterval(watchInterval);
-    };
-  }, []);
+  const [isLogin, setIsLogin] = useState(false);
 
-  const onLogout = (): void => {
+  const onLogout = useCallback((): void => {
     sessionStorage.clear();
     navigate('/');
-  };
+  }, []);
+
+  useEffect(() => {
+    console.log(sessionStorage.getItem('userID'));
+    if (sessionStorage.getItem('userID') !== null) setIsLogin(true);
+  }, []);
 
   return (
     <StyledHeader>
@@ -148,24 +135,30 @@ const Header: React.FC = () => {
           <Dropdown.Item target="_blank" href="https://github.com/kwagyoo/42memory">
             42Memory에 관해
           </Dropdown.Item>
-          <Dropdown.Item>
-            <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
-              <button>URL 복사하기</button>
-            </CopyToClipboard>
-          </Dropdown.Item>
           <Dropdown.Item target="_blank" href="https://github.com/kwagyoo/42memory/issues">
             문제리포트
           </Dropdown.Item>
-          <Dropdown.Item onClick={onLogout}>42Memory 종료</Dropdown.Item>
+          {isLogin && (
+            <>
+              <Dropdown.Item>
+                <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
+                  <button>URL 복사하기</button>
+                </CopyToClipboard>
+              </Dropdown.Item>
+              <Dropdown.Item onClick={onLogout}>42Memory 종료</Dropdown.Item>
+            </>
+          )}
         </DropdownButton>
       </StyledDropdown>
       <div className="clipboard">
-        <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
-          <button className="clipboard-btn">
-            <img src={copyImg} />
-            http://localhost:3000/message/{sessionStorage.getItem('userID')}
-          </button>
-        </CopyToClipboard>
+        {isLogin && (
+          <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
+            <button className="clipboard-btn">
+              <img src={copyImg} />
+              http://localhost:3000/message/{sessionStorage.getItem('userID')}
+            </button>
+          </CopyToClipboard>
+        )}
       </div>
       <div className="header-status-bar">
         <div className="header-icon-list">
@@ -173,9 +166,7 @@ const Header: React.FC = () => {
           <img src={battery} alt="battery icon" />
           <img src={setting} alt="setting icon" />
         </div>
-        <div className="header-watch-div">
-          <p className="header-watch">{nowTime}</p>
-        </div>
+        <HeaderWatchBlock />
       </div>
     </StyledHeader>
   );

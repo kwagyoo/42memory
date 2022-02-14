@@ -14,9 +14,9 @@ const StyledCaution = styled.div`
   height: 100%;
   background-color: #eeeeee;
   img {
-    width: 80px;
-    height: 80px;
-    margin: 10px;
+    width: 90px;
+    height: 90px;
+    margin: 15px;
   }
   .caution-body {
     display: flex;
@@ -25,13 +25,13 @@ const StyledCaution = styled.div`
     height: 90%;
     .caution-text {
       font-size: 18px;
-      font-weight: 500;
+      font-weight: 600;
       padding: 20px;
       flex: 1 0 60%;
       white-space: pre-wrap;
     }
     .btn-primary {
-      margin: 0 30px 10px 450px;
+      margin: 0 30px 10px 400px;
       background-color: #0d6efd !important;
       border-color: #0d6efd !important;
       &:focus {
