@@ -7,6 +7,7 @@ import wifiImg from '../image/Wifi.png';
 import battery from '../image/Battery.png';
 import setting from '../image/Setting.png';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 const StyledDropdown = styled.div`
   height: 100%;
@@ -22,6 +23,13 @@ const StyledDropdown = styled.div`
     align-items: center;
     height: 100%;
     width: 100%;
+    button {
+      padding: 0;
+      color: #dee2e6;
+      background-color: transparent;
+      border: none;
+    }
+
     .btn {
       width: 60px;
       height: 100%;
@@ -107,7 +115,7 @@ const StyledHeader = styled.div`
 
 const Header: React.FC = () => {
   const [nowTime, setNowTime] = useState('');
-
+  const navigate = useNavigate();
   useEffect(() => {
     const watchInterval = setInterval(() => {
       const week = ['일', '월', '화', '수', '목', '금', '토'];
@@ -128,14 +136,27 @@ const Header: React.FC = () => {
     };
   }, []);
 
+  const onLogout = (): void => {
+    sessionStorage.clear();
+    navigate('/');
+  };
+
   return (
     <StyledHeader>
       <StyledDropdown>
         <DropdownButton title={<img className="thumbnail-image" src={logo} alt="user pic" />} menuVariant="dark">
-          <Dropdown.Item>42Memory에 관해</Dropdown.Item>
-          <Dropdown.Item>내 URL 복사하기</Dropdown.Item>
-          <Dropdown.Item>문제리포트</Dropdown.Item>
-          <Dropdown.Item>42Memory 종료</Dropdown.Item>
+          <Dropdown.Item target="_blank" href="https://github.com/kwagyoo/42memory">
+            42Memory에 관해
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
+              <button>URL 복사하기</button>
+            </CopyToClipboard>
+          </Dropdown.Item>
+          <Dropdown.Item target="_blank" href="https://github.com/kwagyoo/42memory/issues">
+            문제리포트
+          </Dropdown.Item>
+          <Dropdown.Item onClick={onLogout}>42Memory 종료</Dropdown.Item>
         </DropdownButton>
       </StyledDropdown>
       <div className="clipboard">

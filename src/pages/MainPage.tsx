@@ -7,6 +7,7 @@ import MessageBlock from '../block/MessageBlock';
 import CautionWindow from '../common/CautionWindow';
 import LoadingModal from '../common/LoadingModal';
 import folder from '../image/42memory_folder.png';
+import { MessageData, SimpleMessageData } from '../types/types';
 
 const StyledButton = styled.button`
   display: flex;
@@ -46,8 +47,8 @@ const StyledButton = styled.button`
 const MainPage: React.FC = () => {
   const params = useParams();
   const [visible, setVisible] = useState(false);
-  const [messageData, setMessageData] = useState<any[] | null>(null);
-  const [messageFiles, setMessageFiles] = useState([]);
+  const [messageData, setMessageData] = useState<MessageData[] | null>(null);
+  const [messageFiles, setMessageFiles] = useState<SimpleMessageData[]>([]);
   const [windowData, setWindowData] = useState(Array(5).fill(-1));
   const [clickedWindow, setClickedWindow] = useState<string>('');
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
@@ -56,9 +57,9 @@ const MainPage: React.FC = () => {
     void (async () => {
       setMessageLoading(true);
       const messageRes = await getMessage(params.userID ?? '');
-      setMessageData(messageRes.messages);
+      setMessageData(messageRes);
       const res = await getMessageNickname(params.userID ?? '');
-      setMessageFiles(res.messages);
+      setMessageFiles(res);
       setTimeout(() => {
         setMessageLoading(false);
       }, 1000);
@@ -90,7 +91,7 @@ const MainPage: React.FC = () => {
             return (
               <MessageBlock
                 key={`on-${index}`}
-                data={messageData?.find((x: { messageID: Number; [key: string]: unknown }) => x.messageID === message)}
+                data={messageData?.find((x: MessageData) => x.messageID === message) ?? null}
                 clickedWindow={clickedWindow}
                 setClickedWindow={setClickedWindow}
                 deleteFromClickedMessages={deleteFromClickedMessages}
@@ -98,8 +99,8 @@ const MainPage: React.FC = () => {
             );
           } else return <MessageBlock key={`off-${index}`} data={null} deleteFromClickedMessages={deleteFromClickedMessages}></MessageBlock>;
         })}
-        <CautionWindow />
       </div>
+      <CautionWindow />
     </>
   );
 };

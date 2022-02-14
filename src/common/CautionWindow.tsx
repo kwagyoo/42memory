@@ -28,6 +28,7 @@ const StyledCaution = styled.div`
       font-weight: 500;
       padding: 20px;
       flex: 1 0 60%;
+      white-space: pre-wrap;
     }
     .btn-primary {
       margin: 0 30px 10px 450px;

@@ -122,7 +122,7 @@ interface FormValues {
   userPasswordConfirm: string;
 }
 
-const RegisterBlock: React.FC = () => {
+const RegisterBlock: React.VFC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<userProps>({
     userClusterName: '',
@@ -135,10 +135,9 @@ const RegisterBlock: React.FC = () => {
 
   const onRegister = useCallback(async (values: FormValues & userProps): Promise<void> => {
     try {
-      const res = await signUp(values);
-      console.log(res);
+      await signUp(values);
       navigate('/');
-    } catch (e: any) {
+    } catch (e: unknown) {
       setError(true);
       setErrorText('회원가입에 실패했습니다.');
     }

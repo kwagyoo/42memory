@@ -3,6 +3,9 @@ import sideimg from '../image/42memory_folder_side.png';
 import fileimg from '../image/42memory_file.png';
 import DraggableWindow from '../common/DraggableWindow';
 import { Col, Container, Row } from 'react-bootstrap';
+import { ErrorContext } from '../module/Context';
+import { useContext } from 'react';
+import { DirectoryProps, SimpleMessageData } from '../types/types';
 
 const StyledDirectory = styled.div`
   width: 100%;
@@ -75,17 +78,25 @@ const StyledDirectory = styled.div`
   }
 `;
 
-const DirectoryBlock: React.FC<any> = ({ setVisible, messageFiles, windowData, setWindowData }: any) => {
-  const onMessage = async (e: React.MouseEvent<HTMLButtonElement>): Promise<any> => {
-    const event = e.target as HTMLButtonElement;
-    const { dataset } = event;
+const DirectoryBlock: React.FC<DirectoryProps> = ({ setVisible, messageFiles, windowData, setWindowData }: DirectoryProps) => {
+  const { setErrorText, setError } = useContext(ErrorContext);
 
-    const unusedWindow = windowData.findIndex((x: Number) => x === -1);
-    const duplicateWindow = windowData.findIndex((x: Number) => x === Number(dataset.id));
-    if (unusedWindow !== -1 && duplicateWindow === -1) {
-      const modified = windowData;
-      modified[unusedWindow] = Number(dataset.id);
-      setWindowData([...modified]);
+  const onMessage = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
+    const deadline = sessionStorage.getItem('userDeadline')?.split('T')[0] ?? '';
+    const parsedDeadline = Date.parse(deadline);
+    if (parsedDeadline < Date.now()) {
+      const event = e.target as HTMLButtonElement;
+      const { dataset } = event;
+      const unusedWindow = windowData.findIndex((x: Number) => x === -1);
+      const duplicateWindow = windowData.findIndex((x: Number) => x === Number(dataset.id));
+      if (unusedWindow !== -1 && duplicateWindow === -1) {
+        const modified = windowData;
+        modified[unusedWindow] = Number(dataset.id);
+        setWindowData([...modified]);
+      }
+    } else {
+      setError(true);
+      setErrorText(`열람 가능 날짜가 지나지 않았습니다. \n열람 가능 날짜: ${deadline}`);
     }
   };
 
@@ -104,7 +115,7 @@ const DirectoryBlock: React.FC<any> = ({ setVisible, messageFiles, windowData, s
           <img src={sideimg} alt="sideimg" className="directory-side-image"></img>
           <Container>
             <Row lg={6}>
-              {messageFiles.map((file: any, index: number) => (
+              {messageFiles.map((file: SimpleMessageData, index: number) => (
                 <Col lg="auto" key={index}>
                   <div className="file-page">
                     <button className="file" onClick={onMessage} data-id={file.messageID}>

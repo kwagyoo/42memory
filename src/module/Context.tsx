@@ -8,14 +8,14 @@ interface ErrorContextProps {
 }
 
 export const ErrorContext = createContext<ErrorContextProps>({
-  error: true,
+  error: false,
   errorText: '',
   setError: () => {},
   setErrorText: () => {},
 });
 
 const ErrorContextProvider: React.FC<React.ReactNode> = ({ children }) => {
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
   const value = useMemo(() => ({ error, setError, errorText, setErrorText }), [error, setError, errorText, setErrorText]);

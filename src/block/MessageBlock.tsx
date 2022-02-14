@@ -3,6 +3,7 @@ import { useLayoutEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 import DraggableWindow from '../common/DraggableWindow';
+import { MessageProps } from '../types/types';
 
 const StyledMessageBlock = styled.div`
   width: 100%;
@@ -15,7 +16,7 @@ const StyledMessageBlock = styled.div`
   }
 `;
 
-const MessageBlock: React.FC<any> = ({ data, clickedWindow, setClickedWindow, deleteFromClickedMessages }) => {
+const MessageBlock: React.FC<MessageProps> = ({ data, clickedWindow, setClickedWindow, deleteFromClickedMessages }) => {
   const [name, setName] = useState<string>('');
 
   useLayoutEffect(() => {
@@ -31,8 +32,12 @@ const MessageBlock: React.FC<any> = ({ data, clickedWindow, setClickedWindow, de
       title={`To. ${sessionStorage.getItem('userClusterName') ?? ''}`}
       width={800}
       height={600}
-      setClickedWindow={() => setClickedWindow(name)}
-      onHeaderButtonClick={() => deleteFromClickedMessages(data.messageID)}
+      setClickedWindow={() => {
+        if (setClickedWindow !== undefined) setClickedWindow(name);
+      }}
+      onHeaderButtonClick={() => {
+        if (data !== null) deleteFromClickedMessages(data.messageID);
+      }}
     >
       <StyledMessageBlock>
         <Card.Title as="h3">{data?.messageTitle}</Card.Title>

@@ -1,27 +1,10 @@
-import { useCallback, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 import ButtonList from './ButtonList';
 import titleimg from '../image/42memory_folder_title_option.png';
 import sendimg from '../image/42memory_send_msg.png';
-
-interface DraggableWindowProps {
-  show?: boolean;
-  zIndex?: string;
-  setClickedWindow?: () => any;
-  title: string;
-  onHeaderButtonClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  children: JSX.Element;
-  width: number;
-  height: number;
-}
-
-interface StyledWindowProps {
-  show: boolean;
-  width: number;
-  height: number;
-  zIndex: string;
-}
+import { DraggableWindowProps, StyledWindowProps } from '../types/types';
 
 const StyledWindow = styled.div`
   position: absolute;
@@ -108,32 +91,33 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({
   onHeaderButtonClick,
   children,
 }: DraggableWindowProps) => {
-  const windowRef = useRef<any>(null);
+  const windowRef = useRef<HTMLDivElement>(null);
 
-  const startDrag = useCallback((e) => {
+  const startDrag = useCallback((e: React.MouseEvent<HTMLElement>) => {
     const refDiv = windowRef.current;
-    const distOffsetX = e.pageX - refDiv.offsetLeft;
-    const distOffsetY = e.pageY - refDiv.offsetTop;
+    if (refDiv !== null) {
+      const distOffsetX = e.pageX - refDiv.offsetLeft;
+      const distOffsetY = e.pageY - refDiv.offsetTop;
 
-    const moveDrag = (e: MouseEvent): void => {
-      const refDiv = windowRef.current;
-      const right = parseInt(refDiv.offsetLeft) + parseInt(refDiv.offsetWidth);
-      const down = parseInt(refDiv.offsetTop) + parseInt(refDiv.offsetHeight);
-      refDiv.style.left = `${refDiv.offsetLeft <= 0 ? 1 : right >= window.innerWidth ? window.innerWidth - refDiv.offsetWidth - 1 : e.pageX - distOffsetX}px`;
-      refDiv.style.top = `${refDiv.offsetTop <= 0 ? 1 : down >= window.innerHeight ? window.innerHeight - refDiv.offsetHeight - 1 : e.pageY - distOffsetY}px`;
-    };
+      const moveDrag = (e: MouseEvent): void => {
+        const right = refDiv.offsetLeft + refDiv.offsetWidth;
+        const down = refDiv.offsetTop + refDiv.offsetHeight;
+        refDiv.style.left = `${refDiv.offsetLeft <= 0 ? 1 : right >= window.innerWidth ? window.innerWidth - refDiv.offsetWidth - 1 : e.pageX - distOffsetX}px`;
+        refDiv.style.top = `${refDiv.offsetTop <= 0 ? 1 : down >= window.innerHeight ? window.innerHeight - refDiv.offsetHeight - 1 : e.pageY - distOffsetY}px`;
+      };
 
-    refDiv.addEventListener('mousemove', moveDrag);
-    document.addEventListener('mousemove', moveDrag); // 빠르게 마우스를 이동하면 refDiv의 영역에서 나가서 이벤트가 발생을 안함.
-    document.addEventListener(
-      'mouseup',
-      () => {
-        document.removeEventListener('mousemove', moveDrag);
-        refDiv.removeEventListener('mousemove', moveDrag);
-      },
-      { once: true },
-    );
-    refDiv.addEventListener('mouseup', () => refDiv.removeEventListener('mousemove', moveDrag));
+      refDiv.addEventListener('mousemove', moveDrag);
+      document.addEventListener('mousemove', moveDrag); // 빠르게 마우스를 이동하면 refDiv의 영역에서 나가서 이벤트가 발생을 안함.
+      document.addEventListener(
+        'mouseup',
+        () => {
+          document.removeEventListener('mousemove', moveDrag);
+          refDiv.removeEventListener('mousemove', moveDrag);
+        },
+        { once: true },
+      );
+      refDiv.addEventListener('mouseup', () => refDiv.removeEventListener('mousemove', moveDrag));
+    }
   }, []);
 
   return (

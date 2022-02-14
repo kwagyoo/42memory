@@ -2,11 +2,12 @@ import { Form, Image, Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 import image42 from '../image/42memory_title.png';
 import { BsArrowRightCircle } from 'react-icons/bs';
-import { signIn, SignInFetch } from '../api/auth';
 import { useNavigate } from 'react-router';
 import client from '../api/client';
 import { useState } from 'react';
 import { useSpring, animated } from 'react-spring';
+import { signInFetch } from '../types/types';
+import { signIn } from '../api/auth';
 
 export const LoginDiv = styled.div`
   position: absolute;
@@ -108,7 +109,7 @@ const LoginPage: React.FC = () => {
   });
 
   const URL = process.env.REACT_APP_REGISTER_URL;
-  const onLogin: React.FormEventHandler<HTMLFormElement> = async (e: React.FormEvent<HTMLFormElement>): Promise<any> => {
+  const onLogin: React.FormEventHandler<HTMLFormElement> = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const { inputId, inputPassword } = e.currentTarget;
     const data = { userClusterName: inputId.value, userPassword: inputPassword.value };
@@ -116,16 +117,16 @@ const LoginPage: React.FC = () => {
     try {
       setLoading(true);
       setLoginTry(true);
-      const res: SignInFetch = await signIn(data);
+      const res: signInFetch = await signIn(data);
       sessionStorage.setItem('accessToken', res.accessToken);
       sessionStorage.setItem('userID', res.userID);
       sessionStorage.setItem('userClusterName', res.userClusterName);
+      sessionStorage.setItem('userDeadline', res.userDeadline);
       // eslint-disable-next-line @typescript-eslint/dot-notation
       client.defaults.headers.common['Authorization'] = `Bearer ${res.accessToken}`;
       navigate(`/mainPage/${res.userID}`);
-    } catch (e: any) {
+    } catch (e: unknown) {
       setLoading(false);
-      console.log(e.response);
     }
   };
   return (
