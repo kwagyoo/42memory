@@ -1,31 +1,7 @@
 import client from './client';
+import { infoData, resData, signData, signInFetch, signUpData } from '../types/types';
 
-export interface resData {
-  data: {
-    [key: string]: string;
-  };
-}
-
-interface signUpData {
-  userClusterName: string;
-  userDeadline: string;
-  userEmail: string;
-  userPassword: string;
-  accessToken: string;
-}
-
-interface signInData {
-  userClusterName: string;
-  userPassword: string;
-}
-
-export interface SignInFetch {
-  userID: string;
-  accessToken: string;
-  userClusterName: string;
-}
-
-export const startRegister = async (code: string): Promise<any> => {
+export const startRegister = async (code: string): Promise<{ info: infoData; accessToken: string }> => {
   const res: resData = await client.post('https://api.intra.42.fr/oauth/token', {
     grant_type: 'authorization_code',
     client_id: process.env.REACT_APP_REGISTER_CLIENT_UID,
@@ -42,7 +18,7 @@ export const startRegister = async (code: string): Promise<any> => {
   return { info: info42, accessToken: res.data.access_token };
 };
 
-export const signUp = async (data: signUpData): Promise<any> =>
+export const signUp = async (data: signUpData): Promise<void> =>
   await client.post('/user', {
     accessToken: data.accessToken,
     userClusterName: data.userClusterName,
@@ -51,7 +27,7 @@ export const signUp = async (data: signUpData): Promise<any> =>
     userEmail: data.userEmail,
   });
 
-export const signIn = async (data: signInData): Promise<SignInFetch> => {
+export const signIn = async (data: signData): Promise<signInFetch> => {
   const res = await client.get('/user', {
     params: {
       userClusterName: data.userClusterName,

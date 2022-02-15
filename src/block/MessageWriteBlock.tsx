@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
-import { getUserClusterName, sendMessage } from '../api/message';
+import { sendMessage } from '../api/message';
 import DraggableWindow from '../common/DraggableWindow';
 import qs from 'qs';
+import { ErrorContext } from '../module/ErrorContext';
 
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -22,19 +23,35 @@ const StyledForm = styled(Form)`
 const MessageWriteBlock: React.FC = () => {
   const params = useParams();
   const [userName, setUserName] = useState('');
+  const [userID, setUserID] = useState('');
   const [code, setCode] = useState('');
   const navigate = useNavigate();
+  const { setError, setErrorText } = useContext(ErrorContext);
+
   useEffect(() => {
-    void (async () => {
-      if (params.userID !== undefined) {
-        const user = await getUserClusterName(params.userID);
-        setUserName(user.data.userClusterName);
-      }
+    try {
+      if (params.userID === undefined) throw new Error('NotValidValue');
+
+      const receiveClusterName = sessionStorage.getItem('receiveClusterName');
+      const receiveUserID = sessionStorage.getItem('receiveUserID');
       const query = qs.parse(location.search, {
         ignoreQueryPrefix: true,
       });
-      setCode(query.code?.toString() ?? '');
-    })();
+      if (receiveClusterName === null || receiveUserID === null) throw new Error('NoReceiveUserData');
+      if (query.code === undefined) throw new Error('NoSenderData');
+      setUserName(receiveClusterName);
+      setUserID(receiveUserID);
+      setCode((query.code as string)?.toString() ?? '');
+    } catch (err) {
+      console.error(err);
+      if (params.userID !== undefined) {
+        alert('유효하지 않는 주소입니다. 홈페이지로 이동합니다.');
+        navigate('/');
+      } else {
+        alert('서버 문제가 발생했습니다. 다시 시도해주세요');
+        navigate(`/message/${params.userID ?? ''}`);
+      }
+    }
   }, []);
 
   const onSendMessage = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -42,7 +59,7 @@ const MessageWriteBlock: React.FC = () => {
     const { messageTitle, messageNickname, messageTextview } = e.currentTarget;
     const data = {
       code: code,
-      userID: params.userID ?? '',
+      userID: userID,
       senderNickname: messageNickname.value,
       messageTitle: messageTitle.value,
       messageText: messageTextview.value,
@@ -54,6 +71,8 @@ const MessageWriteBlock: React.FC = () => {
       if (params.userID !== undefined) {
         navigate(`/message/${params.userID}`);
       }
+      setError(true);
+      setErrorText('메세지 전송에 실패했습니다');
     }
   };
 

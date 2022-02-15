@@ -5,11 +5,12 @@ import { Route, Routes } from 'react-router';
 import Header from './common/Header';
 import MainPage from './pages/MainPage';
 import RegisterPage from './pages/RegisterPage';
-import ZindexProvider from './module/Context';
 import LoginPage from './pages/LoginPage';
 import WritePage from './pages/WritePage';
 import MessageLoginPage from './pages/MessageLoginPage';
 import RedirectPage from './pages/RedirectPage';
+import ErrorContextProvider from './module/ErrorContext';
+import LoginContextProvider from './module/LoginContext';
 
 const BackgroundDiv = styled.div`
   background-image: url(${WallpaperImg});
@@ -25,17 +26,19 @@ const BackgroundDiv = styled.div`
 const App: React.VFC = () => {
   return (
     <BackgroundDiv>
-      <Header />
-      <ZindexProvider>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/mainPage/:userID" element={<MainPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/redirect" element={<RedirectPage />} />
-          <Route path="/message/:userID/write" element={<WritePage />} />
-          <Route path="/message/:userID" element={<MessageLoginPage />} />
-        </Routes>
-      </ZindexProvider>
+      <LoginContextProvider>
+        <Header />
+        <ErrorContextProvider>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/mainPage/:userID" element={<MainPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/redirect" element={<RedirectPage />} />
+            <Route path="/message/:userID/write" element={<WritePage />} />
+            <Route path="/message/:userID" element={<MessageLoginPage />} />
+          </Routes>
+        </ErrorContextProvider>
+      </LoginContextProvider>
     </BackgroundDiv>
   );
 };

@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { getMessage, getMessageNickname } from '../api/message';
 import DirectoryBlock from '../block/DirectoryBlock';
 import MessageBlock from '../block/MessageBlock';
+import CautionWindow from '../common/CautionWindow';
 import LoadingModal from '../common/LoadingModal';
-// import MessageWriteBlock from '../block/MessageWriteBlock';
 import folder from '../image/42memory_folder.png';
+import { LoginContext } from '../module/LoginContext';
+import { MessageData, SimpleMessageData } from '../types/types';
 
 const StyledButton = styled.button`
   display: flex;
@@ -46,23 +48,52 @@ const StyledButton = styled.button`
 const MainPage: React.FC = () => {
   const params = useParams();
   const [visible, setVisible] = useState(false);
-  const [messageData, setMessageData] = useState<any[] | null>(null);
-  const [messageFiles, setMessageFiles] = useState([]);
+  const [messageData, setMessageData] = useState<MessageData[] | null>(null);
+  const [messageFiles, setMessageFiles] = useState<SimpleMessageData[]>([]);
   const [windowData, setWindowData] = useState(Array(5).fill(-1));
   const [clickedWindow, setClickedWindow] = useState<string>('');
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
+  const { setLogin } = useContext(LoginContext);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    void (async () => {
+  const getMessages = useCallback(async () => {
+    try {
       setMessageLoading(true);
       const messageRes = await getMessage(params.userID ?? '');
-      setMessageData(messageRes.messages);
-      const res = await getMessageNickname(params.userID ?? '');
-      setMessageFiles(res.messages);
+      setMessageData(messageRes);
+      sessionStorage.setItem('messages', JSON.stringify(messageRes));
+      const simpleMessageRes = await getMessageNickname(params.userID ?? '');
+      setMessageFiles(simpleMessageRes);
+      sessionStorage.setItem('simpleMessages', JSON.stringify(simpleMessageRes));
       setTimeout(() => {
         setMessageLoading(false);
       }, 1000);
-    })();
+    } catch (err) {
+      console.error(err);
+      alert('오류가 발생하였습니다.');
+      sessionStorage.clear();
+      setLogin(false);
+      navigate('/');
+    }
+  }, []);
+
+  useEffect(() => {
+    const login = sessionStorage.getItem('userID');
+    if (login !== null) {
+      setLogin(true);
+      const simpleMessages = sessionStorage.getItem('simpleMessages');
+      const messages = sessionStorage.getItem('messages');
+
+      if (simpleMessages === null || messages === null) {
+        void getMessages();
+      } else {
+        setMessageData(JSON.parse(messages));
+        setMessageFiles(JSON.parse(simpleMessages));
+      }
+    } else {
+      alert('로그인이 되어있지 않습니다. 메인 페이지로 이동합니다.');
+      navigate('/');
+    }
   }, []);
 
   const deleteFromClickedMessages = useCallback(
@@ -85,13 +116,12 @@ const MainPage: React.FC = () => {
           <img src={folder} alt="folder image" />
           <p>Messages</p>
         </StyledButton>
-        {/* <MessageWriteBlock /> */}
         {windowData.map((message: Number, index) => {
           if (message !== -1) {
             return (
               <MessageBlock
                 key={`on-${index}`}
-                data={messageData?.find((x: { messageID: Number; [key: string]: unknown }) => x.messageID === message)}
+                data={messageData?.find((x: MessageData) => x.messageID === message) ?? null}
                 clickedWindow={clickedWindow}
                 setClickedWindow={setClickedWindow}
                 deleteFromClickedMessages={deleteFromClickedMessages}
@@ -100,6 +130,7 @@ const MainPage: React.FC = () => {
           } else return <MessageBlock key={`off-${index}`} data={null} deleteFromClickedMessages={deleteFromClickedMessages}></MessageBlock>;
         })}
       </div>
+      <CautionWindow />
     </>
   );
 };

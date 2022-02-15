@@ -13,12 +13,13 @@ const MessageLoginPage: React.FC = () => {
     void (async () => {
       try {
         if (params.userID !== undefined) {
-          const user = await getUserClusterName(params.userID);
-          setUserName(user.data.userClusterName);
-          sessionStorage.setItem('userID', params.userID);
+          const userClusterName = await getUserClusterName(params.userID);
+          setUserName(userClusterName ?? '');
+          sessionStorage.setItem('receiveUserID', params.userID);
+          sessionStorage.setItem('receiveClusterName', userClusterName);
         }
       } catch (err) {
-        alert('에러 발생!');
+        console.error(err);
       }
     })();
   }, []);
@@ -30,11 +31,17 @@ const MessageLoginPage: React.FC = () => {
         <div className="thumbnail-42">
           <Image src={image42} />
         </div>
-        <a href={URL}>
-          <Button variant="secondary" className="login" size="lg">
-            {userName} 님에게 글 남기러 가기{' '}
+        {userName === '' ? (
+          <Button variant="secondary" className="login" size="lg" disabled>
+            수신자 정보 로딩중
           </Button>
-        </a>
+        ) : (
+          <a href={URL}>
+            <Button variant="secondary" className="login" size="lg">
+              {userName} 님에게 글 남기러 가기{' '}
+            </Button>
+          </a>
+        )}
       </div>
     </LoginDiv>
   );
