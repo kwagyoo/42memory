@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { sendMessage } from '../api/message';
 import DraggableWindow from '../common/DraggableWindow';
 import qs from 'qs';
-import { ErrorContext } from '../module/Context';
+import { ErrorContext } from '../module/ErrorContext';
 
 const StyledForm = styled(Form)`
   padding: 10px;

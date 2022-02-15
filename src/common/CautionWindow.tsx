@@ -2,7 +2,7 @@ import DraggableWindow from './DraggableWindow';
 import warnimg from '../image/42memory_warning_icon.png';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
-import { ErrorContext } from '../module/Context';
+import { ErrorContext } from '../module/ErrorContext';
 import { useContext } from 'react';
 
 const StyledCaution = styled.div`

@@ -8,7 +8,8 @@ import battery from '../image/Battery.png';
 import setting from '../image/Setting.png';
 import { useNavigate } from 'react-router';
 import HeaderWatchBlock from '../block/HeaderWatchBlock';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext } from 'react';
+import { LoginContext } from '../module/LoginContext';
 
 const StyledDropdown = styled.div`
   height: 100%;
@@ -116,16 +117,12 @@ const StyledHeader = styled.div`
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
+  const { login, setLogin } = useContext(LoginContext);
 
   const onLogout = useCallback((): void => {
     sessionStorage.clear();
+    setLogin(false);
     navigate('/');
-  }, []);
-
-  useEffect(() => {
-    console.log(sessionStorage.getItem('userID'));
-    if (sessionStorage.getItem('userID') !== null) setIsLogin(true);
   }, []);
 
   return (
@@ -138,7 +135,7 @@ const Header: React.FC = () => {
           <Dropdown.Item target="_blank" href="https://github.com/kwagyoo/42memory/issues">
             문제리포트
           </Dropdown.Item>
-          {isLogin && (
+          {login && (
             <>
               <Dropdown.Item>
                 <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
@@ -151,7 +148,7 @@ const Header: React.FC = () => {
         </DropdownButton>
       </StyledDropdown>
       <div className="clipboard">
-        {isLogin && (
+        {login && (
           <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
             <button className="clipboard-btn">
               <img src={copyImg} />

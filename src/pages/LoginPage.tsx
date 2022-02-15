@@ -4,10 +4,11 @@ import image42 from '../image/42memory_title.png';
 import { BsArrowRightCircle } from 'react-icons/bs';
 import { useNavigate } from 'react-router';
 import client from '../api/client';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { signInFetch } from '../types/types';
 import { signIn } from '../api/auth';
+import { LoginContext } from '../module/LoginContext';
 
 export const LoginDiv = styled.div`
   position: absolute;
@@ -95,6 +96,7 @@ const CustomForm = styled(Form)`
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const { setLogin } = useContext(LoginContext);
   const [loading, setLoading] = useState(false);
   const [loginTry, setLoginTry] = useState(false);
   const styles = useSpring({
@@ -122,6 +124,7 @@ const LoginPage: React.FC = () => {
       sessionStorage.setItem('userID', res.userID);
       sessionStorage.setItem('userClusterName', res.userClusterName);
       sessionStorage.setItem('userDeadline', res.userDeadline);
+      setLogin(true);
       // eslint-disable-next-line @typescript-eslint/dot-notation
       client.defaults.headers.common['Authorization'] = `Bearer ${res.accessToken}`;
       navigate(`/mainPage/${res.userID}`);

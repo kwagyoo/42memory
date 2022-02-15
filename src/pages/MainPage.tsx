@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { getMessage, getMessageNickname } from '../api/message';
 import DirectoryBlock from '../block/DirectoryBlock';
@@ -7,6 +7,7 @@ import MessageBlock from '../block/MessageBlock';
 import CautionWindow from '../common/CautionWindow';
 import LoadingModal from '../common/LoadingModal';
 import folder from '../image/42memory_folder.png';
+import { LoginContext } from '../module/LoginContext';
 import { MessageData, SimpleMessageData } from '../types/types';
 
 const StyledButton = styled.button`
@@ -52,6 +53,8 @@ const MainPage: React.FC = () => {
   const [windowData, setWindowData] = useState(Array(5).fill(-1));
   const [clickedWindow, setClickedWindow] = useState<string>('');
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
+  const { setLogin } = useContext(LoginContext);
+  const navigate = useNavigate();
 
   const getMessages = useCallback(async () => {
     try {
@@ -68,17 +71,28 @@ const MainPage: React.FC = () => {
     } catch (err) {
       console.error(err);
       alert('오류가 발생하였습니다.');
+      sessionStorage.clear();
+      setLogin(false);
+      navigate('/');
     }
   }, []);
 
   useEffect(() => {
-    const simpleMessages = sessionStorage.getItem('simpleMessages');
-    const messages = sessionStorage.getItem('messages');
-    if (simpleMessages === null || messages === null) {
-      void getMessages();
+    const login = sessionStorage.getItem('userID');
+    if (login !== null) {
+      setLogin(true);
+      const simpleMessages = sessionStorage.getItem('simpleMessages');
+      const messages = sessionStorage.getItem('messages');
+
+      if (simpleMessages === null || messages === null) {
+        void getMessages();
+      } else {
+        setMessageData(JSON.parse(messages));
+        setMessageFiles(JSON.parse(simpleMessages));
+      }
     } else {
-      setMessageData(JSON.parse(messages));
-      setMessageFiles(JSON.parse(simpleMessages));
+      alert('로그인이 되어있지 않습니다. 메인 페이지로 이동합니다.');
+      navigate('/');
     }
   }, []);
 

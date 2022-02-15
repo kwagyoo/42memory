@@ -7,7 +7,7 @@ import { signUp, startRegister } from '../api/auth';
 import image42 from '../image/42memory_title.png';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
-import { ErrorContext } from '../module/Context';
+import { ErrorContext } from '../module/ErrorContext';
 
 const StyledRegister = styled.div`
   width: 800px;

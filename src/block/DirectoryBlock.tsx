@@ -3,7 +3,7 @@ import sideimg from '../image/42memory_folder_side.png';
 import fileimg from '../image/42memory_file.png';
 import DraggableWindow from '../common/DraggableWindow';
 import { Col, Container, Row } from 'react-bootstrap';
-import { ErrorContext } from '../module/Context';
+import { ErrorContext } from '../module/ErrorContext';
 import { useContext } from 'react';
 import { DirectoryProps, SimpleMessageData } from '../types/types';
 
@@ -99,8 +99,6 @@ const DirectoryBlock: React.FC<DirectoryProps> = ({ setVisible, messageFiles, wi
       setErrorText(`열람 가능 날짜가 지나지 않았습니다. \n열람 가능 날짜: ${deadline}`);
     }
   };
-
-  console.log(messageFiles);
 
   return (
     <DraggableWindow
