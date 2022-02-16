@@ -11,6 +11,8 @@ import MessageLoginPage from './pages/MessageLoginPage';
 import RedirectPage from './pages/RedirectPage';
 import ErrorContextProvider from './module/ErrorContext';
 import LoginContextProvider from './module/LoginContext';
+import { useMediaQuery } from 'react-responsive';
+import { Alert } from 'react-bootstrap';
 
 const BackgroundDiv = styled.div`
   background-image: url(${WallpaperImg});
@@ -19,28 +21,54 @@ const BackgroundDiv = styled.div`
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  @media only screen and (max-width: 768px) {
-  }
 `;
 
+const GuideDiv = styled.div`
+  background-image: url(${WallpaperImg});
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: gray;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  .alert {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+`;
 const App: React.VFC = () => {
+  const isPc = useMediaQuery({
+    query: '(min-width : 1024px) and (max-width :1920px)',
+  });
   return (
-    <BackgroundDiv>
-      <LoginContextProvider>
-        <Header />
-        <ErrorContextProvider>
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/mainPage/:userID" element={<MainPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/redirect" element={<RedirectPage />} />
-            <Route path="/message/:userID/write" element={<WritePage />} />
-            <Route path="/message/:userID" element={<MessageLoginPage />} />
-            <Route path="*" element={<MainPage />} />
-          </Routes>
-        </ErrorContextProvider>
-      </LoginContextProvider>
-    </BackgroundDiv>
+    <>
+      {isPc ? (
+        <BackgroundDiv>
+          <LoginContextProvider>
+            <Header />
+            <ErrorContextProvider>
+              <Routes>
+                <Route path="/" element={<LoginPage />} />
+                <Route path="/mainPage/:userID" element={<MainPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/redirect" element={<RedirectPage />} />
+                <Route path="/message/:userID/write" element={<WritePage />} />
+                <Route path="/message/:userID" element={<MessageLoginPage />} />
+                <Route path="*" element={<MainPage />} />
+              </Routes>
+            </ErrorContextProvider>
+          </LoginContextProvider>
+        </BackgroundDiv>
+      ) : (
+        <GuideDiv>
+          <Alert show={true} variant="danger">
+            <Alert.Heading>PC 해상도로 접속해주세요!</Alert.Heading>
+          </Alert>
+        </GuideDiv>
+      )}
+    </>
   );
 };
 
