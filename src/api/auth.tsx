@@ -18,6 +18,22 @@ export const startRegister = async (code: string): Promise<{ info: infoData; acc
   return { info: info42, accessToken: res.data.access_token };
 };
 
+export const checkUser = async (code: string): Promise<{ ClusterName: string; accessToken: string }> => {
+  const res: resData = await client.post('https://api.intra.42.fr/oauth/token', {
+    grant_type: 'authorization_code',
+    client_id: process.env.REACT_APP_MESSAGE_CLIENT_UID,
+    client_secret: process.env.REACT_APP_MESSAGE_CLIENT_SERECT,
+    code: code,
+    redirect_uri: 'http://localhost:3000/redirect',
+  });
+  const info42 = await client.get('https://api.intra.42.fr/v2/me', {
+    headers: {
+      Authorization: `Bearer ${res.data.access_token}`,
+    },
+  });
+  return { ClusterName: info42.data.login, accessToken: res.data.access_token };
+};
+
 export const signUp = async (data: signUpData): Promise<void> =>
   await client.post('/user', {
     accessToken: data.accessToken,

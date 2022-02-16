@@ -36,6 +36,7 @@ const App: React.VFC = () => {
             <Route path="/redirect" element={<RedirectPage />} />
             <Route path="/message/:userID/write" element={<WritePage />} />
             <Route path="/message/:userID" element={<MessageLoginPage />} />
+            <Route path="*" element={<MainPage />} />
           </Routes>
         </ErrorContextProvider>
       </LoginContextProvider>

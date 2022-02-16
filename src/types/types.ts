@@ -47,7 +47,7 @@ export interface MessageData extends SimpleMessageData {
 }
 
 export interface SendMessageData {
-  code: string;
+  accessToken: string;
   userID: string;
   senderNickname: string;
   messageTitle: string;

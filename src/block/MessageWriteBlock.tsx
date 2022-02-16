@@ -24,7 +24,7 @@ const MessageWriteBlock: React.FC = () => {
   const params = useParams();
   const [userName, setUserName] = useState('');
   const [userID, setUserID] = useState('');
-  const [code, setCode] = useState('');
+  const [accessToken, setAccessToken] = useState('');
   const navigate = useNavigate();
   const { setError, setErrorText } = useContext(ErrorContext);
 
@@ -38,10 +38,10 @@ const MessageWriteBlock: React.FC = () => {
         ignoreQueryPrefix: true,
       });
       if (receiveClusterName === null || receiveUserID === null) throw new Error('NoReceiveUserData');
-      if (query.code === undefined) throw new Error('NoSenderData');
+      if (query.accessToken === undefined) throw new Error('NoSenderData');
       setUserName(receiveClusterName);
       setUserID(receiveUserID);
-      setCode((query.code as string)?.toString() ?? '');
+      setAccessToken((query.accessToken as string) ?? '');
     } catch (err) {
       console.error(err);
       if (params.userID !== undefined) {
@@ -58,7 +58,7 @@ const MessageWriteBlock: React.FC = () => {
     e.preventDefault();
     const { messageTitle, messageNickname, messageTextview } = e.currentTarget;
     const data = {
-      code: code,
+      accessToken: accessToken,
       userID: userID,
       senderNickname: messageNickname.value,
       messageTitle: messageTitle.value,

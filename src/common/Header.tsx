@@ -1,4 +1,4 @@
-import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { Dropdown, DropdownButton, Overlay, Tooltip } from 'react-bootstrap';
 import styled from 'styled-components';
 import logo from '../image/42memory_apple_logo.png';
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -8,7 +8,7 @@ import battery from '../image/Battery.png';
 import setting from '../image/Setting.png';
 import { useNavigate } from 'react-router';
 import HeaderWatchBlock from '../block/HeaderWatchBlock';
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { LoginContext } from '../module/LoginContext';
 
 const StyledDropdown = styled.div`
@@ -125,6 +125,8 @@ const Header: React.FC = () => {
     navigate('/');
   }, []);
 
+  const target = useRef(null);
+  const [show, setShow] = useState(false);
   return (
     <StyledHeader>
       <StyledDropdown>
@@ -149,12 +151,28 @@ const Header: React.FC = () => {
       </StyledDropdown>
       <div className="clipboard">
         {login && (
-          <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
-            <button className="clipboard-btn">
-              <img src={copyImg} />
-              http://localhost:3000/message/{sessionStorage.getItem('userID')}
-            </button>
-          </CopyToClipboard>
+          <>
+            <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
+              <button
+                ref={target}
+                className="clipboard-btn"
+                onClick={() => {
+                  setShow(true);
+                  setTimeout(() => setShow(false), 1000);
+                }}
+              >
+                <img src={copyImg} />
+                http://localhost:3000/message/{sessionStorage.getItem('userID')}
+              </button>
+            </CopyToClipboard>
+            <Overlay target={target.current} show={show} placement="bottom">
+              {(props) => (
+                <Tooltip id="overlay-example" {...props}>
+                  복사되었습니다.
+                </Tooltip>
+              )}
+            </Overlay>
+          </>
         )}
       </div>
       <div className="header-status-bar">
