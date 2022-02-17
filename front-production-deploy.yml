@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: front-production-deploy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: main
+  pull_request:
+    branches: main
+
+defaults:
+  run:
+    working-directory: ./
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2 # 워크플로에서 액세스할 수 있도록 에서 저장소를 체크아웃
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Build
+        run: yarn build
+
+      - name: S3 Deploy
+        run: aws s3 sync ./dist s3://42memory --acl bucket-owner-full-control # s3 이름 42memory
+      - name: CloudFront Invalidity
+        run: aws cloudfront create-invalidation --distribution-id E1TBXDQ5SV4EB9 --paths /index.html
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
