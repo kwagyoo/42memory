@@ -15,6 +15,7 @@ const RedirectPage: React.FC = () => {
       const code = (query.code as string).toString();
       const userClusterName = sessionStorage.getItem('receiveClusterName');
       const res = await fetch42(code);
+      console.log(res);
       if (userClusterName === res.data.login) {
         alert('본인의 계정에 메세지를 남길 수 없습니다');
         navigate('/');
