@@ -24,7 +24,7 @@ export const checkUser = async (code: string): Promise<{ ClusterName: string; ac
     client_id: process.env.REACT_APP_MESSAGE_CLIENT_UID,
     client_secret: process.env.REACT_APP_MESSAGE_CLIENT_SERECT,
     code: code,
-    redirect_uri: process.env.REACT_APP_MESSAGE_REDIECT_URL,
+    redirect_uri: process.env.REACT_APP_MESSAGE_REDIRECT_REDIRECT_URL,
   });
   const info42 = await client.get('https://api.intra.42.fr/v2/me', {
     headers: {
