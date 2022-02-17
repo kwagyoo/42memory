@@ -14,7 +14,6 @@ const RedirectPage: React.FC = () => {
     if (userID !== null && query.code !== undefined) {
       const code = (query.code as string).toString();
       const userClusterName = sessionStorage.getItem('receiveClusterName');
-      console.log(code);
       const res = await checkUser(code);
       console.log(res);
       if (userClusterName === res.ClusterName) {
