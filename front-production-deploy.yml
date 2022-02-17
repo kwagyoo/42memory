@@ -30,11 +30,15 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: S3 Deploy
-        run: aws s3 sync ./dist s3://42memory --acl bucket-owner-full-control # s3 이름 42memory
-      - name: CloudFront Invalidity
-        run: aws cloudfront create-invalidation --distribution-id E1TBXDQ5SV4EB9 --paths /index.html
-        env:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: S3 Deploy
+        run: aws s3 sync ./dist s3://42memory --delete # s3 이름 42memory
+
+      - name: CloudFront Invalidity
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/*"
