@@ -5,7 +5,7 @@ export const startRegister = async (code: string): Promise<{ info: infoData; acc
   const res: resData = await client.post('https://api.intra.42.fr/oauth/token', {
     grant_type: 'authorization_code',
     client_id: process.env.REACT_APP_REGISTER_CLIENT_UID,
-    client_secret: process.env.REACT_APP_REGISTER_CLIENT_SERECT,
+    client_secret: process.env.REACT_APP_REGISTER_CLIENT_SECRET,
     code: code,
     redirect_uri: process.env.REACT_APP_REGISTER_REDIECT_URL,
   });
@@ -22,7 +22,7 @@ export const checkUser = async (code: string): Promise<{ ClusterName: string; ac
   const res: resData = await client.post('https://api.intra.42.fr/oauth/token', {
     grant_type: 'authorization_code',
     client_id: process.env.REACT_APP_MESSAGE_CLIENT_UID,
-    client_secret: process.env.REACT_APP_MESSAGE_CLIENT_SERECT,
+    client_secret: process.env.REACT_APP_MESSAGE_CLIENT_SECRET,
     code: code,
     redirect_uri: process.env.REACT_APP_MESSAGE_REDIRECT_REDIRECT_URL,
   });
