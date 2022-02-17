@@ -1,13 +1,14 @@
 import client from './client';
 import { resData, signData, signInFetch, signUpData } from '../types/types';
+import { AxiosResponse } from 'axios';
 
 export const fetch42 = async (code: string): Promise<resData> => {
-  const res: resData = await client.get(`/user/info`, {
+  const res: AxiosResponse<resData> = await client.get(`/user/info`, {
     params: {
       code: code,
     },
   });
-  return res;
+  return res.data;
 };
 
 export const signUp = async (data: signUpData): Promise<void> =>
