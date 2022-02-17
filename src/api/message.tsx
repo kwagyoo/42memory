@@ -9,7 +9,7 @@ export const getUserClusterName = async (userID: string): Promise<string> => {
 
 export const getReceiverData = async (userID: string): Promise<string | null> => {
   try {
-    const res = await client.get(`/user/${userID}/message/info`);
+    const res = await client.get(`/user/${userID}/message/name`);
     return res.data.userClusterName;
   } catch (err) {
     return null;
