@@ -20,6 +20,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: ${{ secrets.AWS_REGION }}
         AWS_DISTRIBUTION_ID: ${{ secrets.AWS_DISTRIBUTION_ID }}
+        REACT_APP_REGISTER_URL: ${{ secrets.TEST }}
         SOURCE_DIR: 'build'
     steps:
       - name: Checkout source code
