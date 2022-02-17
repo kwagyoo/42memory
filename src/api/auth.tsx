@@ -7,7 +7,7 @@ export const startRegister = async (code: string): Promise<{ info: infoData; acc
     client_id: process.env.REACT_APP_REGISTER_CLIENT_UID,
     client_secret: process.env.REACT_APP_REGISTER_CLIENT_SERECT,
     code: code,
-    redirect_uri: 'http://localhost:3000/register',
+    redirect_uri: `http://${process.env.REACT_APP_HOME ?? ''}/register`,
   });
   const info42 = await client.get('https://api.intra.42.fr/v2/me', {
     headers: {
@@ -24,7 +24,7 @@ export const checkUser = async (code: string): Promise<{ ClusterName: string; ac
     client_id: process.env.REACT_APP_MESSAGE_CLIENT_UID,
     client_secret: process.env.REACT_APP_MESSAGE_CLIENT_SERECT,
     code: code,
-    redirect_uri: 'http://localhost:3000/redirect',
+    redirect_uri: `http://${process.env.REACT_APP_HOME ?? ''}/redirect`,
   });
   const info42 = await client.get('https://api.intra.42.fr/v2/me', {
     headers: {

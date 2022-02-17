@@ -140,7 +140,10 @@ const Header: React.FC = () => {
           {login && (
             <>
               <Dropdown.Item>
-                <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
+                <CopyToClipboard
+                  text={`http://${process.env.REACT_APP_HOME ?? ''}/message/${sessionStorage.getItem('userID') ?? ''}`}
+                  onCopy={() => console.log('copy')}
+                >
                   <button>URL 복사하기</button>
                 </CopyToClipboard>
               </Dropdown.Item>
@@ -152,7 +155,10 @@ const Header: React.FC = () => {
       <div className="clipboard">
         {login && (
           <>
-            <CopyToClipboard text={`http://localhost:3000/message/${sessionStorage.getItem('userID') ?? ''}`} onCopy={() => console.log('copy')}>
+            <CopyToClipboard
+              text={`http://${process.env.REACT_APP_HOME ?? ''}/message/${sessionStorage.getItem('userID') ?? ''}`}
+              onCopy={() => console.log('copy')}
+            >
               <button
                 ref={target}
                 className="clipboard-btn"
@@ -162,7 +168,7 @@ const Header: React.FC = () => {
                 }}
               >
                 <img src={copyImg} />
-                http://localhost:3000/message/{sessionStorage.getItem('userID')}
+                http://{process.env.REACT_APP_HOME ?? ''}/message/{sessionStorage.getItem('userID')}
               </button>
             </CopyToClipboard>
             <Overlay target={target.current} show={show} placement="bottom">
