@@ -64,7 +64,7 @@ const App: React.VFC = () => {
       ) : (
         <GuideDiv>
           <Alert show={true} variant="danger">
-            <Alert.Heading>PC 해상도로 접속해주세요!</Alert.Heading>
+            <Alert.Heading>PC 해상도로 접속해주세요!!</Alert.Heading>
           </Alert>
         </GuideDiv>
       )}
