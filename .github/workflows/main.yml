@@ -31,7 +31,7 @@ jobs:
         REACT_APP_MESSAGE_REDIRECT_URL: ${{ secrets.REACT_APP_MESSAGE_REDIRECT_URL }}
         REACT_APP_MESSAGE_REDIRECT_REDIRECT_URL: ${{ secrets.REACT_APP_MESSAGE_REDIRECT_REDIRECT_URL }}
         REACT_APP_MESSAGE_CLIENT_UID: ${{ secrets.REACT_APP_MESSAGE_CLIENT_UID }}
-        REACT_APP_MESSAGE_CLIENT_SERECT: ${{ secrets.REACT_APP_MESSAGE_CLIENT_SERECT }}
+        REACT_APP_MESSAGE_CLIENT_SECRET: ${{ secrets.REACT_APP_MESSAGE_CLIENT_SECRET }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2 # 워크플로에서 액세스할 수 있도록 에서 저장소를 체크아웃
