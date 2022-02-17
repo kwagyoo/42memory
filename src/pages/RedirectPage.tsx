@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import qs from 'qs';
 import { useNavigate } from 'react-router';
-import { Fetch42 } from '../api/auth';
+import { fetch42 } from '../api/auth';
 
 const RedirectPage: React.FC = () => {
   const navigate = useNavigate();
@@ -14,13 +14,12 @@ const RedirectPage: React.FC = () => {
     if (userID !== null && query.code !== undefined) {
       const code = (query.code as string).toString();
       const userClusterName = sessionStorage.getItem('receiveClusterName');
-      const res = await Fetch42(code);
-      console.log(res);
-      if (userClusterName === res.ClusterName) {
+      const res = await fetch42(code);
+      if (userClusterName === res.data.login) {
         alert('본인의 계정에 메세지를 남길 수 없습니다');
         navigate('/');
       } else {
-        // navigate(`/message/${userID}/write?accessToken=${res.accessToken}`);
+        navigate(`/message/${userID}/write?accessToken=${res.accessToken}`);
       }
     }
   };

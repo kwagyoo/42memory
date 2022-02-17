@@ -111,7 +111,6 @@ const LoginPage: React.FC = () => {
   });
 
   const URL = process.env.REACT_APP_REGISTER_URL;
-  console.log(URL);
   const onLogin: React.FormEventHandler<HTMLFormElement> = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const { inputId, inputPassword } = e.currentTarget;

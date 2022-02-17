@@ -1,14 +1,9 @@
 export interface resData {
   data: {
-    [key: string]: string;
-  };
-}
-
-export interface infoData {
-  data: {
     login: string;
     cursus_users: Array<{ [key: string]: string; blackholed_at: string }>;
   };
+  accessToken: string;
 }
 
 export interface signUpData extends signData {

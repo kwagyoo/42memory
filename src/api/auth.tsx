@@ -1,13 +1,12 @@
 import client from './client';
 import { resData, signData, signInFetch, signUpData } from '../types/types';
 
-export const Fetch42 = async (code: string): Promise<any> => {
+export const fetch42 = async (code: string): Promise<resData> => {
   const res: resData = await client.get(`/user/info`, {
     params: {
       code: code,
     },
   });
-  console.log(res);
   return res;
 };
 

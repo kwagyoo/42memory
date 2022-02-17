@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
 import { Formik } from 'formik';
 import styled from 'styled-components';
-import { Fetch42, signUp } from '../api/auth';
+import { fetch42, signUp } from '../api/auth';
 import image42 from '../image/42memory_title.png';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
@@ -148,11 +148,10 @@ const RegisterBlock: React.VFC = () => {
       const query = QueryString.parse(location.search, {
         ignoreQueryPrefix: true,
       });
-      const res = await Fetch42(query.code as string);
-      const data = res.info.data;
+      const res = await fetch42(query.code as string);
       setUser({
-        userClusterName: data.login,
-        userDeadline: data.cursus_users[1].blackholed_at.split('T')[0],
+        userClusterName: res.data.login,
+        userDeadline: res.data.cursus_users[1].blackholed_at.split('T')[0],
         accessToken: res.accessToken,
       });
     } catch (e) {
