@@ -30,7 +30,7 @@ jobs:
         run: yarn build
 
       - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@master
+        uses: jakejarvis/s3-sync-action@main
         with:
           args: --acl public-read --delete
         env:
