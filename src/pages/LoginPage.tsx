@@ -1,4 +1,4 @@
-import { Form, Image, Spinner } from 'react-bootstrap';
+import { Form, Image, Modal, Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 import image42 from '../image/42memory_title.png';
 import { BsArrowRightCircle } from 'react-icons/bs';
@@ -7,7 +7,7 @@ import client from '../api/client';
 import { useContext, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { signInFetch } from '../types/types';
-import { signIn } from '../api/auth';
+import { resetPassword, signIn } from '../api/auth';
 import { LoginContext } from '../module/LoginContext';
 
 export const LoginDiv = styled.div`
@@ -58,6 +58,9 @@ export const LoginDiv = styled.div`
       border-color: #6c757d !important;
     }
   }
+  .spinner-grow {
+    left: 120px;
+  }
 `;
 
 const CustomForm = styled(Form)`
@@ -105,6 +108,8 @@ const LoginPage: React.FC = () => {
   const { setLogin } = useContext(LoginContext);
   const [loading, setLoading] = useState(false);
   const [loginTry, setLoginTry] = useState(false);
+  const [smShow, setSmShow] = useState(false);
+
   const styles = useSpring({
     from: { x: 0 },
     to: [{ x: -5 }, { x: 5 }, { x: -5 }, { x: 5 }, { x: 0 }],
@@ -138,8 +143,36 @@ const LoginPage: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const onReset = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    const { inputEmail } = e.currentTarget;
+    try {
+      setLoading(true);
+      await resetPassword(inputEmail.value);
+      alert('작성한 이메일로 임시 비밀번호가 전송되었습니다.');
+      setLoading(false);
+      setSmShow(false);
+    } catch (e: unknown) {
+      alert('알수없는 오류가 발생했습니다.');
+      setLoading(false);
+      setSmShow(false);
+    }
+  };
+
   return (
     <LoginDiv>
+      <Modal centered size="lg" show={smShow} onHide={() => setSmShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">비밀번호 초기화</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={onReset}>
+            {loading ? <Spinner animation="border" /> : <Form.Control type="text" className="form-control" id="inputEmail" placeholder="이메일을 입력하세요" />}
+          </Form>
+        </Modal.Body>
+      </Modal>
+
       <div className="login-form">
         <div className="thumbnail-42">
           <Image src={image42} />
@@ -165,7 +198,9 @@ const LoginPage: React.FC = () => {
           <a href={URL}>
             <button className="login-additional-btn">회원가입</button>
           </a>
-          <button className="login-additional-btn">비밀번호를 잊으셨나요?</button>
+          <button className="login-additional-btn" onClick={() => setSmShow(true)}>
+            비밀번호를 잊으셨나요?
+          </button>
         </div>
       </div>
     </LoginDiv>

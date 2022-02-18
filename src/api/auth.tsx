@@ -30,3 +30,8 @@ export const signIn = async (data: signData): Promise<signInFetch> => {
   });
   return res.data;
 };
+
+export const resetPassword = async (userEmail: string): Promise<void> =>
+  await client.post('/user/password', {
+    userEmail: userEmail,
+  });
