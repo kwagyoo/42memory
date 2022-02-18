@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
 import { ErrorContext } from '../module/ErrorContext';
 import axios from 'axios';
+import LoadingModal from '../common/LoadingModal';
 
 const StyledRegister = styled.div`
   width: 800px;
@@ -126,19 +127,22 @@ interface FormValues {
 const RegisterBlock: React.VFC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<userProps>({
-    userClusterName: '',
+    userClusterName: '로딩 중..',
     userDeadline: '',
     userEmail: '',
     userPassword: '',
     accessToken: '',
   });
   const { setError, setErrorText } = useContext(ErrorContext);
+  const [completed, setCompleted] = useState(false);
 
   const onRegister = useCallback(async (values: FormValues & userProps): Promise<void> => {
     try {
+      setCompleted(false);
       await signUp(values);
       navigate('/');
     } catch (e: unknown) {
+      setCompleted(true);
       setError(true);
       setErrorText('회원가입에 실패했습니다.');
     }
@@ -186,6 +190,7 @@ const RegisterBlock: React.VFC = () => {
 
   return (
     <StyledRegister>
+      {completed && <LoadingModal completed={completed} />}
       <div className="register-header">
         <p>42Memory 회원 가입</p>
       </div>
