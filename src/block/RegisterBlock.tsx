@@ -149,7 +149,7 @@ const RegisterBlock: React.VFC = () => {
       const query = QueryString.parse(location.search, {
         ignoreQueryPrefix: true,
       });
-      const res = await fetch42(query.code as string);
+      const res = await fetch42(query.code as string, 'register');
       const began = new Date(res.data.cursus_users[1].begin_at);
       const blackholed = new Date(res.data.cursus_users[1].blackholed_at);
       const expired = new Date(began.getFullYear() + 2, began.getMonth(), began.getDate() - 1);

@@ -2,10 +2,11 @@ import client from './client';
 import { resData, signData, signInFetch, signUpData } from '../types/types';
 import { AxiosResponse } from 'axios';
 
-export const fetch42 = async (code: string): Promise<resData> => {
+export const fetch42 = async (code: string, type: string): Promise<resData> => {
   const res: AxiosResponse<resData> = await client.get(`/user/info`, {
     params: {
       code: code,
+      type: type,
     },
   });
   return res.data;

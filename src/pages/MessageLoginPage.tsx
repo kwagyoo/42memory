@@ -41,7 +41,7 @@ const MessageLoginPage: React.FC = () => {
           </a>
         ) : (
           <Button variant="secondary" className="login" size="lg" disabled>
-            {userName === null ? '만료되었거나 문제가 발생한 링크입니다.' : '수신자 정보 로딩중'}
+            {userName === null ? '만료되었거나\n 문제가 발생한 링크입니다.' : '수신자 정보 로딩중'}
           </Button>
         )}
       </div>
