@@ -154,7 +154,7 @@ const RegisterBlock: React.VFC = () => {
       const blackholed = new Date(res.data.cursus_users[1].blackholed_at);
       const expired = new Date(began.getFullYear() + 2, began.getMonth(), began.getDate() - 1);
       const finalDate = blackholed < expired ? blackholed : expired;
-      const restDay = (Date.now() - finalDate.getTime()) / (1000 * 3600 * 24);
+      const restDay = (finalDate.getTime() - Date.now()) / (1000 * 3600 * 24);
       if (restDay < 0 || restDay > 31) throw new Error('UnavailableDate');
       setUser({
         userClusterName: res.data.login,
