@@ -153,7 +153,7 @@ const RegisterBlock: React.VFC = () => {
       const began = new Date(res.data.cursus_users[1].begin_at);
       const blackholed = new Date(res.data.cursus_users[1].blackholed_at);
       const expired = new Date(began.getFullYear() + 2, began.getMonth(), began.getDate() - 1);
-      const finalDate = blackholed < expired ? expired : expired;
+      const finalDate = blackholed < expired ? blackholed : expired;
       const restDay = (Date.now() - finalDate.getTime()) / (1000 * 3600 * 24);
       if (restDay < 0 || restDay > 31) throw new Error('UnavailableDate');
       setUser({
@@ -166,7 +166,7 @@ const RegisterBlock: React.VFC = () => {
       if (axios.isAxiosError(e)) {
         alert('유저 정보를 가져올 수 없습니다.');
       } else {
-        alert('블랙홀이 되기 1달(31일) 전부터 링크 생성이 가능합니다.');
+        alert('블랙홀로 빠져들기 1달(31일) 전부터 링크 생성이 가능합니다.');
       }
       navigate('/');
     }
