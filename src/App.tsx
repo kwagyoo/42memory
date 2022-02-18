@@ -39,12 +39,15 @@ const GuideDiv = styled.div`
   }
 `;
 const App: React.VFC = () => {
-  const isPc = useMediaQuery({
-    query: '(min-width : 1024px)',
+  const isPcW = useMediaQuery({
+    query: '(min-width : 1280px)',
+  });
+  const isPcH = useMediaQuery({
+    query: '(min-height : 800px)',
   });
   return (
     <>
-      {isPc ? (
+      {isPcW && isPcH ? (
         <BackgroundDiv>
           <LoginContextProvider>
             <Header />

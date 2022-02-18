@@ -89,7 +89,7 @@ const StyledHeader = styled.div`
   .header-status-bar {
     display: flex;
     flex: 1 0 33%;
-    justify-content: end;
+    justify-content: flex-end;
   }
   .header-icon-list {
     display: flex;

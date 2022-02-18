@@ -25,7 +25,6 @@ const MessageLoginPage: React.FC = () => {
   }, []);
 
   const URL = process.env.REACT_APP_MESSAGE_REDIRECT_URL;
-  console.log(URL);
   return (
     <LoginDiv>
       <div className="message-login">

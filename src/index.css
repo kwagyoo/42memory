@@ -31,3 +31,9 @@ button, input {
 ::-ms-reveal {
   display: none;
 }
+
+
+input:focus::-webkit-textfield-decoration-container {
+	visibility: hidden;
+}
+

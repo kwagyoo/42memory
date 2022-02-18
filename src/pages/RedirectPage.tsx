@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import qs from 'qs';
 import { useNavigate } from 'react-router';
 import { fetch42 } from '../api/auth';
+import LoadingModal from '../common/LoadingModal';
 
 const RedirectPage: React.FC = () => {
   const navigate = useNavigate();
-
+  const [completed, setCompleted] = useState(false);
   const checkUserName = async (): Promise<void> => {
     const userID = sessionStorage.getItem('receiveUserID');
     const query = qs.parse(location.search, {
@@ -15,6 +16,7 @@ const RedirectPage: React.FC = () => {
       const code = (query.code as string).toString();
       const userClusterName = sessionStorage.getItem('receiveClusterName');
       const res = await fetch42(code);
+      setCompleted(true);
       if (userClusterName === res.data.login) {
         alert('본인의 계정에 메세지를 남길 수 없습니다');
         navigate('/');
@@ -27,7 +29,11 @@ const RedirectPage: React.FC = () => {
   useEffect(() => {
     void checkUserName();
   });
-  return <div></div>;
+  return (
+    <div>
+      <LoadingModal completed={completed} />
+    </div>
+  );
 };
 
 export default RedirectPage;

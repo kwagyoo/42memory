@@ -110,7 +110,7 @@ const MainPage: React.FC = () => {
   return (
     <>
       {messageLoading ? <LoadingModal completed={messageData !== null} /> : ''}
-      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'start', justifyContent: 'end' }}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }}>
         {visible && <DirectoryBlock setVisible={setVisible} messageFiles={messageFiles} windowData={windowData} setWindowData={setWindowData} />}
         <StyledButton onClick={() => setVisible(true)}>
           <img src={folder} alt="folder image" />
