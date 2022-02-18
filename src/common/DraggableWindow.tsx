@@ -54,6 +54,7 @@ const StyledWindow = styled.div`
       font-size: 18px;
     }
     .title-option-image {
+      height: 33px;
       -webkit-user-drag: none;
       -khtml-user-drag: none;
       -moz-user-drag: none;

@@ -66,7 +66,8 @@ const MessageWriteBlock: React.FC = () => {
     };
     try {
       const res = await sendMessage(data);
-      console.log(res);
+      alert(`메세지 전송에 성공했습니다.\n 앞으로 ${3 - res}번 보낼 수 있습니다.`);
+      navigate(`/message/${params.userID ?? ''}`);
     } catch (e) {
       if (params.userID !== undefined) {
         navigate(`/message/${params.userID}`);
@@ -77,7 +78,7 @@ const MessageWriteBlock: React.FC = () => {
   };
 
   return (
-    <DraggableWindow title="Send a message" width={1000} height={800} onHeaderButtonClick={() => console.log('hello')}>
+    <DraggableWindow title="Send a message" width={900} height={700} onHeaderButtonClick={() => console.log('hello')}>
       <StyledForm id="send-message" onSubmit={onSendMessage}>
         <Form.Group as={Row} className="mb-3">
           <Form.Label column sm="2">
@@ -99,7 +100,14 @@ const MessageWriteBlock: React.FC = () => {
             <Form.Control name="messageNickname" placeholder="닉네임을 작성해주세요" />
           </Col>
         </Form.Group>
-        <Form.Control className="textblock" as="textarea" wrap="hard" name="messageTextview" placeholder="작성하고 싶은 내용을 자유롭게 작성해주세요" />
+        <Form.Control
+          className="textblock"
+          as="textarea"
+          wrap="hard"
+          name="messageTextview"
+          placeholder="작성하고 싶은 내용을 자유롭게 작성해주세요 (2000자 이내)"
+          maxLength={2000}
+        />
       </StyledForm>
     </DraggableWindow>
   );

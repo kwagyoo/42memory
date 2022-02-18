@@ -20,6 +20,10 @@ export const LoginDiv = styled.div`
   top: calc(50% - 185px);
   left: calc(50% - 150px);
 
+  .login-form {
+    width: 197px;
+    height: 343px;
+  }
   .thumbnail-42 {
     width: 170px;
     height: 170px;
@@ -34,12 +38,14 @@ export const LoginDiv = styled.div`
   .login-addtional {
     display: flex;
     flex-direction: column;
+    margin-top: 5px;
     .login-additional-btn {
       width: 100%;
+      height: 30px;
       font-size: 15px;
       background-color: transparent;
       border: none;
-      margin: 5px 0;
+      margin-bottom: 3px;
       color: #d3dde1;
     }
     .login-additional-btn:hover {
@@ -134,7 +140,7 @@ const LoginPage: React.FC = () => {
   };
   return (
     <LoginDiv>
-      <div>
+      <div className="login-form">
         <div className="thumbnail-42">
           <Image src={image42} />
         </div>

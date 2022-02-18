@@ -12,13 +12,14 @@ const StyledDirectory = styled.div`
   height: 100%;
   .directory-content {
     width: 100%;
-    height: 730px;
+    height: 583px;
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: flex-start;
     .container {
       overflow: scroll;
       overflow-x: hidden;
+      height: 580px;
     }
     .directory-side-image {
       width: 243px;
@@ -53,6 +54,7 @@ const StyledDirectory = styled.div`
         img {
           pointer-events: none;
           width: 90%;
+          height: 75px;
           padding: 7px;
           border-radius: 4px;
         }
@@ -102,8 +104,8 @@ const DirectoryBlock: React.FC<DirectoryProps> = ({ setVisible, messageFiles, wi
 
   return (
     <DraggableWindow
-      width={1000}
-      height={800}
+      width={900}
+      height={650}
       title="Messages"
       onHeaderButtonClick={(e) => {
         e.preventDefault();
