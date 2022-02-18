@@ -13,15 +13,22 @@ const RedirectPage: React.FC = () => {
       ignoreQueryPrefix: true,
     });
     if (userID !== null && query.code !== undefined) {
-      const code = (query.code as string).toString();
-      const userClusterName = sessionStorage.getItem('receiveClusterName');
-      const res = await fetch42(code);
-      setCompleted(true);
-      if (userClusterName === res.data.login) {
-        alert('본인의 계정에 메세지를 남길 수 없습니다');
+      try {
+        const code = (query.code as string).toString();
+        const userClusterName = sessionStorage.getItem('receiveClusterName');
+        const res = await fetch42(code);
+        setCompleted(true);
+        if (userClusterName === res.data.login) {
+          alert('본인의 계정에 메세지를 남길 수 없습니다');
+          navigate('/');
+        } else {
+          navigate(`/message/${userID}/write?accessToken=${res.accessToken}`);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('오류가 발생하였습니다.');
+        sessionStorage.clear();
         navigate('/');
-      } else {
-        navigate(`/message/${userID}/write?accessToken=${res.accessToken}`);
       }
     }
   };

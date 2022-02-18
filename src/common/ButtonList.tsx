@@ -16,7 +16,7 @@ const StyledButtonList = styled.div`
 
   .button-list {
     width: 20px;
-    height: 20px;
+    height: 25px;
     padding: 0 1px;
     img {
       width: 15px;

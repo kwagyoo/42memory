@@ -15,7 +15,7 @@ const StyledDirectory = styled.div`
     height: 583px;
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: flex-start;
     .container {
       overflow: scroll;
       overflow-x: hidden;
@@ -54,6 +54,7 @@ const StyledDirectory = styled.div`
         img {
           pointer-events: none;
           width: 90%;
+          height: 75px;
           padding: 7px;
           border-radius: 4px;
         }
