@@ -16,7 +16,7 @@ export const LoginDiv = styled.div`
   align-items: center;
   justify-content: center;
   height: 370px;
-  width: 300px;
+  width: 400px;
   top: calc(50% - 185px);
   left: calc(50% - 150px);
 
