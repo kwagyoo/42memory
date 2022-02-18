@@ -7,6 +7,15 @@ export const getUserClusterName = async (userID: string): Promise<string> => {
   return res.data.userClusterName;
 };
 
+export const getReceiverData = async (userID: string): Promise<string | null> => {
+  try {
+    const res = await client.get(`/user/${userID}/message/name`);
+    return res.data.userClusterName;
+  } catch (err) {
+    return null;
+  }
+};
+
 export const getMessageNickname = async (userID: string): Promise<SimpleMessageData[]> => {
   const res = await client.get(`/user/${userID}/message/simple`);
   return res.data.messages;

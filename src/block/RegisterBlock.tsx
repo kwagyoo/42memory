@@ -8,6 +8,7 @@ import image42 from '../image/42memory_title.png';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
 import { ErrorContext } from '../module/ErrorContext';
+import axios from 'axios';
 
 const StyledRegister = styled.div`
   width: 800px;
@@ -143,23 +144,33 @@ const RegisterBlock: React.VFC = () => {
     }
   }, []);
 
-  const getUser = async (): Promise<void> => {
+  const getUser = useCallback(async (): Promise<void> => {
     try {
       const query = QueryString.parse(location.search, {
         ignoreQueryPrefix: true,
       });
       const res = await fetch42(query.code as string);
+      const began = new Date(res.data.cursus_users[1].begin_at);
+      const blackholed = new Date(res.data.cursus_users[1].blackholed_at);
+      const expired = new Date(began.getFullYear() + 2, began.getMonth(), began.getDate() - 1);
+      const finalDate = blackholed < expired ? expired : expired;
+      const restDay = (Date.now() - finalDate.getTime()) / (1000 * 3600 * 24);
+      if (restDay < 0 || restDay > 31) throw new Error('UnavailableDate');
       setUser({
         userClusterName: res.data.login,
-        userDeadline: res.data.cursus_users[1].blackholed_at.split('T')[0],
+        userDeadline: finalDate.toISOString().split('T')[0],
         accessToken: res.accessToken,
       });
-    } catch (e) {
+    } catch (e: unknown) {
       console.log(e);
-      alert('유저 정보를 가져올 수 없습니다.');
+      if (axios.isAxiosError(e)) {
+        alert('유저 정보를 가져올 수 없습니다.');
+      } else {
+        alert('블랙홀이 되기 1달(31일) 전부터 링크 생성이 가능합니다.');
+      }
       navigate('/');
     }
-  };
+  }, []);
 
   useEffect(() => {
     void getUser();
