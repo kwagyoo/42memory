@@ -105,7 +105,7 @@ const MessageWriteBlock: React.FC = () => {
             보낸사람
           </Form.Label>
           <Col sm="10">
-            <Form.Control name="messageNickname" placeholder="닉네임을 작성해주세요" />
+            <Form.Control name="messageNickname" placeholder="닉네임을 작성해주세요(10자 이내)" maxLength={10} />
           </Col>
         </Form.Group>
         <Form.Control

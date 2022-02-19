@@ -138,7 +138,7 @@ const LoginPage: React.FC = () => {
       setLogin(true);
       // eslint-disable-next-line @typescript-eslint/dot-notation
       client.defaults.headers.common['Authorization'] = `Bearer ${res.accessToken}`;
-      navigate(`/mainPage/${res.userID}`);
+      navigate(`/main/${res.userID}`);
     } catch (e: unknown) {
       setLoading(false);
     }
