@@ -85,10 +85,10 @@ const StyledDirectory = styled.div`
 const DirectoryBlock: React.FC<DirectoryProps> = ({ setVisible, messageFiles, windowData, setWindowData }: DirectoryProps) => {
   const { setErrorText, setError } = useContext(ErrorContext);
 
-  const onMessage = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
+  const onMessage = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const deadline = sessionStorage.getItem('userDeadline')?.split('T')[0] ?? '';
-    const parsedDeadline = Date.parse(deadline);
-    if (parsedDeadline < Date.now()) {
+    const parsedDeadline = Date.parse(deadline) - 9 * 60 * 60 * 1000; // deadline이 gmt 기준으로 인식되어 변환시 오전 9시가 된다.
+    if (parsedDeadline <= Date.now()) {
       const event = e.target as HTMLButtonElement;
       const { dataset } = event;
       const unusedWindow = windowData.findIndex((x: Number) => x === -1);
