@@ -6,6 +6,7 @@ import { sendMessage } from '../api/message';
 import DraggableWindow from '../common/DraggableWindow';
 import qs from 'qs';
 import { ErrorContext } from '../module/ErrorContext';
+import LoadingModal from '../common/LoadingModal';
 
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -27,6 +28,8 @@ const MessageWriteBlock: React.FC = () => {
   const [accessToken, setAccessToken] = useState('');
   const navigate = useNavigate();
   const { setError, setErrorText } = useContext(ErrorContext);
+  const [completed, setCompleted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     try {
@@ -56,6 +59,7 @@ const MessageWriteBlock: React.FC = () => {
 
   const onSendMessage = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    if (loading) return;
     const { messageTitle, messageNickname, messageTextview } = e.currentTarget;
     const data = {
       accessToken: accessToken,
@@ -65,13 +69,16 @@ const MessageWriteBlock: React.FC = () => {
       messageText: messageTextview.value,
     };
     try {
+      setLoading(true);
       const res = await sendMessage(data);
+      setCompleted(true);
       alert(`메세지 전송에 성공했습니다.\n앞으로 ${3 - res}번 보낼 수 있습니다.`);
       navigate(`/message/${params.userID ?? ''}`);
     } catch (e) {
       if (params.userID !== undefined) {
         navigate(`/message/${params.userID}`);
       }
+      setLoading(false);
       setError(true);
       setErrorText('메세지 전송에 실패했습니다');
     }
@@ -80,6 +87,7 @@ const MessageWriteBlock: React.FC = () => {
   return (
     <DraggableWindow title="Send a message" width={900} height={700} onHeaderButtonClick={() => console.log('hello')}>
       <StyledForm id="send-message" onSubmit={onSendMessage}>
+        {loading && <LoadingModal completed={completed} />}
         <Form.Group as={Row} className="mb-3">
           <Form.Label column sm="2">
             받는사람

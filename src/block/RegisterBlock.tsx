@@ -135,18 +135,25 @@ const RegisterBlock: React.VFC = () => {
   });
   const { setError, setErrorText } = useContext(ErrorContext);
   const [completed, setCompleted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const onRegister = useCallback(async (values: FormValues & userProps): Promise<void> => {
-    try {
-      setCompleted(false);
-      await signUp(values);
-      navigate('/');
-    } catch (e: unknown) {
-      setCompleted(true);
-      setError(true);
-      setErrorText('회원가입에 실패했습니다.');
-    }
-  }, []);
+  const onRegister = useCallback(
+    async (values: FormValues & userProps): Promise<void> => {
+      if (loading) return;
+      try {
+        setCompleted(false);
+        setLoading(true);
+        await signUp(values);
+        navigate('/');
+      } catch (e: unknown) {
+        setCompleted(true);
+        setLoading(false);
+        setError(true);
+        setErrorText('회원가입에 실패했습니다.');
+      }
+    },
+    [loading],
+  );
 
   const getUser = useCallback(async (): Promise<void> => {
     try {
@@ -159,7 +166,7 @@ const RegisterBlock: React.VFC = () => {
       const expired = new Date(began.getFullYear() + 2, began.getMonth(), began.getDate() - 1);
       const finalDate = blackholed < expired ? blackholed : expired;
       const restDay = (finalDate.getTime() - Date.now()) / (1000 * 3600 * 24);
-      if (restDay < 0 || restDay > 31) throw new Error('UnavailableDate');
+      if (restDay < 0) throw new Error('UnavailableDate'); // || restDay > 31 오픈베타용으로 잠시 풀어준다
       setUser({
         userClusterName: res.data.login,
         userDeadline: finalDate.toISOString().split('T')[0],
@@ -190,7 +197,7 @@ const RegisterBlock: React.VFC = () => {
 
   return (
     <StyledRegister>
-      {completed && <LoadingModal completed={completed} />}
+      {loading && <LoadingModal completed={completed} />}
       <div className="register-header">
         <p>42Memory 회원 가입</p>
       </div>
