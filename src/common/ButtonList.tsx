@@ -19,6 +19,7 @@ const StyledButtonList = styled.div`
     height: 25px;
     padding: 0 1px;
     img {
+      user-drag: none;
       width: 15px;
       height: 15px;
     }
