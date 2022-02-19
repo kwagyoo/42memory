@@ -18,7 +18,7 @@ export const LoginDiv = styled.div`
   height: 370px;
   width: 400px;
   top: calc(50% - 185px);
-  left: calc(50% - 150px);
+  left: calc(50% - 200px);
 
   .login-form {
     width: 197px;
