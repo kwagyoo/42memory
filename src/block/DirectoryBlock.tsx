@@ -59,6 +59,8 @@ const StyledDirectory = styled.div`
           border-radius: 4px;
         }
         .file-name {
+          width: 70px;
+          font-size: 14px;
           padding: 0 5px;
           border-radius: 4px;
         }
@@ -122,7 +124,7 @@ const DirectoryBlock: React.FC<DirectoryProps> = ({ setVisible, messageFiles, wi
                   <div className="file-page">
                     <button className="file" onClick={onMessage} data-id={file.messageID}>
                       <img src={fileimg} alt="file" />
-                      <div className="file-name">{file.senderNickname}</div>
+                      <div className="file-name">{file.senderNickname.length >= 5 ? `${file.senderNickname.slice(0, 4)}...` : file.senderNickname}</div>
                     </button>
                   </div>
                 </Col>
