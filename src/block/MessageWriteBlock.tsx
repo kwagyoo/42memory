@@ -75,9 +75,6 @@ const MessageWriteBlock: React.FC = () => {
       alert(`메세지 전송에 성공했습니다.\n앞으로 ${3 - res}번 보낼 수 있습니다.`);
       navigate(`/message/${params.userID ?? ''}`);
     } catch (e) {
-      if (params.userID !== undefined) {
-        navigate(`/message/${params.userID}`);
-      }
       setLoading(false);
       setError(true);
       setErrorText('메세지 전송에 실패했습니다');
