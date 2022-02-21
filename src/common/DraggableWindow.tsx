@@ -20,11 +20,6 @@ const StyledWindow = styled.div`
   border-radius: 8px;
   border: 1px solid #beb5b4;
   background-color: #eeeeee;
-  /* 드래그 방지 */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 
   .card {
     width: 100%;
