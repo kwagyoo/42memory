@@ -4,7 +4,7 @@ import image42 from '../image/42memory_title.png';
 import { BsArrowRightCircle } from 'react-icons/bs';
 import { useNavigate } from 'react-router';
 import client from '../api/client';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { signInFetch } from '../types/types';
 import { resetPassword, signIn } from '../api/auth';
@@ -159,6 +159,12 @@ const LoginPage: React.FC = () => {
       setSmShow(false);
     }
   };
+
+  useEffect(() => {
+    if (sessionStorage.getItem('userID') !== undefined) {
+      sessionStorage.clear();
+    }
+  }, []);
 
   return (
     <LoginDiv>
