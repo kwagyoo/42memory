@@ -8,7 +8,7 @@ import battery from '../image/Battery.png';
 import setting from '../image/Setting.png';
 import { useNavigate } from 'react-router';
 import HeaderWatchBlock from '../block/HeaderWatchBlock';
-import { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { LoginContext } from '../module/LoginContext';
 
 const StyledDropdown = styled.div`
@@ -118,7 +118,7 @@ const StyledHeader = styled.div`
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const { login, setLogin } = useContext(LoginContext);
-
+  const userDeadline = useMemo(() => sessionStorage.getItem('userDeadline')?.split('T')[0], []);
   const onLogout = useCallback((): void => {
     sessionStorage.clear();
     setLogin(false);
@@ -173,8 +173,9 @@ const Header: React.FC = () => {
             </CopyToClipboard>
             <Overlay target={target.current} show={show} placement="bottom">
               {(props) => (
-                <Tooltip id="overlay-example" {...props}>
-                  복사되었습니다.
+                <Tooltip data-html="true" id="overlay-example" {...props}>
+                  복사되었습니다. <br />
+                  만료 기간: ~{userDeadline}
                 </Tooltip>
               )}
             </Overlay>

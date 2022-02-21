@@ -88,7 +88,7 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({
   children,
 }: DraggableWindowProps) => {
   const windowRef = useRef<HTMLDivElement>(null);
-  const randomPos = useMemo(() => [Math.random() * 50 - 25, Math.random() * 50 - 25], []);
+  const randomPos = useMemo(() => [Math.random() * 50 - 25, Math.random() * 50 - 25], [show]);
 
   const startDrag = useCallback((e: React.MouseEvent<HTMLElement>) => {
     const refDiv = windowRef.current;
