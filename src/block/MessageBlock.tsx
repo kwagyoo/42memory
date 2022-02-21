@@ -13,6 +13,10 @@ const StyledMessageBlock = styled.div`
   .message-text {
     white-space: pre-wrap;
     height: 460px;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
   }
 `;
 

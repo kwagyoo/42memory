@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 import ButtonList from './ButtonList';
@@ -8,8 +8,8 @@ import { DraggableWindowProps, StyledWindowProps } from '../types/types';
 
 const StyledWindow = styled.div`
   position: absolute;
-  left: 200px;
-  top: 100px;
+  left: ${(props: StyledWindowProps) => `${200 - props.random[0]}px`};
+  top: ${(props: StyledWindowProps) => `${100 - props.random[1]}px`};
   width: ${(props: StyledWindowProps) => `${props.width}px`};
   height: ${(props: StyledWindowProps) => `${props.height}px`};
   z-index: ${(props: StyledWindowProps) => props.zIndex};
@@ -20,11 +20,6 @@ const StyledWindow = styled.div`
   border-radius: 8px;
   border: 1px solid #beb5b4;
   background-color: #eeeeee;
-  /* 드래그 방지 */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 
   .card {
     width: 100%;
@@ -93,6 +88,7 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({
   children,
 }: DraggableWindowProps) => {
   const windowRef = useRef<HTMLDivElement>(null);
+  const randomPos = useMemo(() => [Math.random() * 50 - 25, Math.random() * 50 - 25], [show]);
 
   const startDrag = useCallback((e: React.MouseEvent<HTMLElement>) => {
     const refDiv = windowRef.current;
@@ -122,7 +118,16 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({
   }, []);
 
   return (
-    <StyledWindow className="draggable-window" onMouseDown={setClickedWindow} show={show} width={width} height={height} ref={windowRef} zIndex={zIndex}>
+    <StyledWindow
+      className="draggable-window"
+      onMouseDown={setClickedWindow}
+      show={show}
+      random={randomPos}
+      width={width}
+      height={height}
+      ref={windowRef}
+      zIndex={zIndex}
+    >
       <Card>
         <Card.Header onMouseDown={startDrag}>
           <div className="header-content">

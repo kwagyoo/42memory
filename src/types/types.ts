@@ -72,4 +72,5 @@ export interface StyledWindowProps {
   width: number;
   height: number;
   zIndex: string;
+  random: number[];
 }
