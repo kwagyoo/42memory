@@ -8,7 +8,7 @@ import battery from '../image/Battery.png';
 import setting from '../image/Setting.png';
 import { useNavigate } from 'react-router';
 import HeaderWatchBlock from '../block/HeaderWatchBlock';
-import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { LoginContext } from '../module/LoginContext';
 
 const StyledDropdown = styled.div`
@@ -118,7 +118,7 @@ const StyledHeader = styled.div`
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const { login, setLogin } = useContext(LoginContext);
-  const userDeadline = useMemo(() => sessionStorage.getItem('userDeadline')?.split('T')[0], []);
+  const userDeadline = sessionStorage.getItem('userDeadline')?.split('T')[0];
   const onLogout = useCallback((): void => {
     sessionStorage.clear();
     setLogin(false);
@@ -157,16 +157,12 @@ const Header: React.FC = () => {
           <>
             <CopyToClipboard
               text={`http://${process.env.REACT_APP_HOME ?? ''}/message/${sessionStorage.getItem('userID') ?? ''}`}
-              onCopy={() => console.log('copy')}
+              onCopy={() => {
+                setShow(true);
+                setTimeout(() => setShow(false), 1000);
+              }}
             >
-              <button
-                ref={target}
-                className="clipboard-btn"
-                onClick={() => {
-                  setShow(true);
-                  setTimeout(() => setShow(false), 1000);
-                }}
-              >
+              <button ref={target} className="clipboard-btn">
                 <img src={copyImg} />
                 http://{process.env.REACT_APP_HOME ?? ''}/message/{sessionStorage.getItem('userID')}
               </button>
