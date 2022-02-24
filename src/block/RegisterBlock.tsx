@@ -166,7 +166,7 @@ const RegisterBlock: React.VFC = () => {
       const expired = new Date(began.getFullYear() + 2, began.getMonth(), began.getDate() - 1);
       const finalDate = blackholed < expired ? blackholed : expired;
       const restDay = (finalDate.getTime() - Date.now()) / (1000 * 3600 * 24);
-      if (restDay < 0) throw new Error('UnavailableDate'); // || restDay > 31 오픈베타용으로 잠시 풀어준다
+      if (restDay < 0 || restDay > 31) throw new Error('UnavailableDate');
       setUser({
         userClusterName: res.data.login,
         userDeadline: finalDate.toISOString().split('T')[0],
