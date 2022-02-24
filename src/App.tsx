@@ -47,8 +47,6 @@ const App: React.VFC = () => {
     query: '(min-height : 750px)',
   });
 
-  console.log(isPcW, isPcH);
-
   return (
     <>
       {isPcW && isPcH ? (
