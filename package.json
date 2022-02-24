@@ -39,6 +39,7 @@
     "react-scripts": "5.0.0",
     "react-spring": "^9.4.2",
     "redux-persist": "^6.0.0",
+    "reduxjs-toolkit-persist": "^7.2.1",
     "styled-components": "^5.3.3",
     "web-vitals": "^2.1.0",
     "yup": "^0.32.11"

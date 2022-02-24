@@ -1435,7 +1435,7 @@
     "@react-spring/shared" "~9.4.0"
     "@react-spring/types" "~9.4.0"
 
-"@reduxjs/toolkit@^1.7.2":
+"@reduxjs/toolkit@^1.6.1", "@reduxjs/toolkit@^1.7.2":
   "integrity" "sha512-wwr3//Ar8ZhM9bS58O+HCIaMlR4Y6SNHfuszz9hKnQuFIKvwaL3Kmjo6fpDKUOjo4Lv54Yi299ed8rofCJ/Vjw=="
   "resolved" "https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-1.7.2.tgz"
   "version" "1.7.2"
@@ -7786,6 +7786,11 @@
   "version" "4.1.2"
   dependencies:
     "@babel/runtime" "^7.9.2"
+
+"reduxjs-toolkit-persist@^7.2.1":
+  "integrity" "sha512-1gu9Qid0qXlsM4a2D8eHx/YOwa7I0lgAXqM0KYQoX2RA+KMezkq5wkJKEMLoUkpqVuWYHRdU7auS2/jFVsR0gQ=="
+  "resolved" "https://registry.npmjs.org/reduxjs-toolkit-persist/-/reduxjs-toolkit-persist-7.2.1.tgz"
+  "version" "7.2.1"
 
 "regenerate-unicode-properties@^9.0.0":
   "integrity" "sha512-3E12UeNSPfjrgwjkR81m5J7Aw/T55Tu7nUyZVQYCKEOs+2dkxEY+DpPtZzO4YruuiPb7NkYLVcyJC4+zCbk5pA=="

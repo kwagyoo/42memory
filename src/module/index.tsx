@@ -1,12 +1,11 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist'; // 추가
-import storageSession from 'redux-persist/lib/storage/session';
+import { persistReducer } from 'reduxjs-toolkit-persist'; // 추가
+import storage from 'reduxjs-toolkit-persist/lib/storage'; // defaults to localStorage for web
 import error from './error';
 
 const persistConfig = {
   key: 'root',
-  // localStorage에 저장합니다.
-  storageSession,
+  storage,
 };
 
 const rootReducer = combineReducers({ error });
