@@ -266,7 +266,7 @@ const RegisterBlock: React.VFC = () => {
                 <Form.Control type="date" placeholder="Deadline" value={user.userDeadline} disabled />
               </FloatingLabel>
               <div className="btn-group">
-                <Button variant="secondary" size="sm">
+                <Button variant="secondary" size="sm" onClick={() => navigate('/')}>
                   취소
                 </Button>
                 <Button variant="primary" type="submit" size="sm">
