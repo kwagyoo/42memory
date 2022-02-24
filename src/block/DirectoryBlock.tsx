@@ -3,8 +3,8 @@ import sideimg from '../image/42memory_folder_side.png';
 import fileimg from '../image/42memory_file.png';
 import DraggableWindow from '../common/DraggableWindow';
 import { Col, Container, Row } from 'react-bootstrap';
-// import { ErrorContext } from '../module/ErrorContext';
-// import { useContext } from 'react';
+import { ErrorContext } from '../module/ErrorContext';
+import { useContext } from 'react';
 import { DirectoryProps, SimpleMessageData } from '../types/types';
 
 const StyledDirectory = styled.div`
@@ -66,7 +66,7 @@ const StyledDirectory = styled.div`
         }
 
         &:hover {
-          cursor: default;
+          cursor: pointer;
         }
         &:focus {
           img {
@@ -83,15 +83,24 @@ const StyledDirectory = styled.div`
 `;
 
 const DirectoryBlock: React.FC<DirectoryProps> = ({ setVisible, messageFiles, windowData, setWindowData }: DirectoryProps) => {
+  const { setErrorText, setError } = useContext(ErrorContext);
+
   const onMessage = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    const event = e.target as HTMLButtonElement;
-    const { dataset } = event;
-    const unusedWindow = windowData.findIndex((x: Number) => x === -1);
-    const duplicateWindow = windowData.findIndex((x: Number) => x === Number(dataset.id));
-    if (unusedWindow !== -1 && duplicateWindow === -1) {
-      const modified = windowData;
-      modified[unusedWindow] = Number(dataset.id);
-      setWindowData([...modified]);
+    const deadline = sessionStorage.getItem('userDeadline')?.split('T')[0] ?? '';
+    const parsedDeadline = Date.parse(deadline) - 9 * 60 * 60 * 1000; // deadline이 gmt 기준으로 인식되어 변환시 오전 9시가 된다.
+    if (parsedDeadline <= Date.now()) {
+      const event = e.target as HTMLButtonElement;
+      const { dataset } = event;
+      const unusedWindow = windowData.findIndex((x: Number) => x === -1);
+      const duplicateWindow = windowData.findIndex((x: Number) => x === Number(dataset.id));
+      if (unusedWindow !== -1 && duplicateWindow === -1) {
+        const modified = windowData;
+        modified[unusedWindow] = Number(dataset.id);
+        setWindowData([...modified]);
+      }
+    } else {
+      setError(true);
+      setErrorText(`열람 가능 날짜가 지나지 않았습니다. \n열람 가능 날짜: ${deadline}`);
     }
   };
 
