@@ -20,6 +20,12 @@ const StyledWindow = styled.div`
   border-radius: 8px;
   border: 1px solid #beb5b4;
   background-color: #eeeeee;
+  @media (max-width: 1080px) {
+    display: none;
+  }
+  @media (max-height: 700px) {
+    display: none;
+  }
 
   .card {
     width: 100%;
