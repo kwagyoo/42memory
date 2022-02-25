@@ -2,8 +2,9 @@ import DraggableWindow from './DraggableWindow';
 import warnimg from '../image/42memory_warning_icon.png';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
-import { ErrorContext } from '../module/ErrorContext';
-import { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetError } from '../module/error';
+import { RootState } from '../module/store';
 
 const StyledCaution = styled.div`
   display: flex;
@@ -51,7 +52,8 @@ const StyledCenter = styled.div`
 `;
 
 const CautionWindow: React.VFC = () => {
-  const { errorText, error, setError } = useContext(ErrorContext);
+  const { error, errorText } = useSelector((state: RootState) => state.error);
+  const dispatch = useDispatch();
 
   return (
     <StyledCenter>
@@ -60,7 +62,7 @@ const CautionWindow: React.VFC = () => {
           <img src={warnimg} alt="warning" />
           <div className="caution-body">
             <div className="caution-text">{errorText}</div>
-            <Button variant="primary" type="submit" size="sm" onClick={() => setError(false)}>
+            <Button variant="primary" type="submit" size="sm" onClick={() => dispatch(resetError)}>
               확인
             </Button>
           </div>

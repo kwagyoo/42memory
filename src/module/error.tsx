@@ -29,6 +29,10 @@ const apiSlice = createSlice({
       state.error = true;
       state.errorText = action.payload.errorText;
     },
+    resetError: (state: APIProps, action: PayloadAction<APIProps>) => {
+      state.error = false;
+      state.errorText = '';
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -45,6 +49,6 @@ const apiSlice = createSlice({
   },
 });
 
-const { actions, reducer } = apiSlice;
-export const { setError } = actions;
-export default reducer;
+const { actions: errorActions, reducer: error } = apiSlice;
+export const { setError, resetError } = errorActions;
+export default error;

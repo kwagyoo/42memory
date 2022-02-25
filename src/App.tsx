@@ -22,15 +22,20 @@ const BackgroundDiv = styled.div`
 `;
 
 const GuideDiv = styled.div`
+  position: absolute;
+  top: 0%;
+  left: 0%;
   background-image: url(${WallpaperImg});
   background-repeat: no-repeat;
   background-size: cover;
   background-color: gray;
+  overflow: hidden;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+
   .alert {
-    position: absolute;
+    width: 30%;
+    min-width: 350px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -47,26 +52,25 @@ const App: React.VFC = () => {
 
   return (
     <>
-      {isPcW && isPcH ? (
-        <BackgroundDiv>
-          <Header />
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/main/:userID" element={<MainPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/redirect" element={<RedirectPage />} />
-            <Route path="/message/:userID/write" element={<WritePage />} />
-            <Route path="/message/:userID" element={<MessageLoginPage />} />
-            <Route path="*" element={<MainPage />} />
-          </Routes>
-        </BackgroundDiv>
-      ) : (
-        <GuideDiv>
-          <Alert show={true} variant="danger">
-            <Alert.Heading>브라우저 크기를 조절해주세요(1280px & 750px)</Alert.Heading>
-          </Alert>
-        </GuideDiv>
-      )}
+      <BackgroundDiv>
+        <Header />
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/main/:userID" element={<MainPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/redirect" element={<RedirectPage />} />
+          <Route path="/message/:userID/write" element={<WritePage />} />
+          <Route path="/message/:userID" element={<MessageLoginPage />} />
+          <Route path="*" element={<MainPage />} />
+        </Routes>
+        {!(isPcW && isPcH) && (
+          <GuideDiv>
+            <Alert show={true} variant="danger">
+              <Alert.Heading>브라우저 크기를 조절해주세요(1280px & 750px)</Alert.Heading>
+            </Alert>
+          </GuideDiv>
+        )}
+      </BackgroundDiv>
     </>
   );
 };
