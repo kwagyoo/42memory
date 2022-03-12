@@ -9,7 +9,6 @@ export interface resData {
 export interface signUpData extends signData {
   userDeadline: string;
   userEmail: string;
-  accessToken: string;
 }
 
 export interface signData {
@@ -42,7 +41,7 @@ export interface MessageData extends SimpleMessageData {
 }
 
 export interface SendMessageData {
-  accessToken: string;
+  //   accessToken: string;
   userID: string;
   senderNickname: string;
   messageTitle: string;

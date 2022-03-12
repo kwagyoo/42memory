@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { sendMessage } from '../api/message';
 import DraggableWindow from '../common/DraggableWindow';
-import qs from 'qs';
+// import qs from 'qs';
 import { ErrorContext } from '../module/ErrorContext';
 import LoadingModal from '../common/LoadingModal';
 
@@ -25,7 +25,7 @@ const MessageWriteBlock: React.FC = () => {
   const params = useParams();
   const [userName, setUserName] = useState('');
   const [userID, setUserID] = useState('');
-  const [accessToken, setAccessToken] = useState('');
+  //   const [accessToken, setAccessToken] = useState('');
   const navigate = useNavigate();
   const { setError, setErrorText } = useContext(ErrorContext);
   const [completed, setCompleted] = useState(false);
@@ -37,14 +37,14 @@ const MessageWriteBlock: React.FC = () => {
 
       const receiveClusterName = sessionStorage.getItem('receiveClusterName');
       const receiveUserID = sessionStorage.getItem('receiveUserID');
-      const query = qs.parse(location.search, {
-        ignoreQueryPrefix: true,
-      });
+      //   const query = qs.parse(location.search, {
+      //     ignoreQueryPrefix: true,
+      //   });
       if (receiveClusterName === null || receiveUserID === null) throw new Error('NoReceiveUserData');
-      if (query.accessToken === undefined) throw new Error('NoSenderData');
+      //   if (query.accessToken === undefined) throw new Error('NoSenderData');
       setUserName(receiveClusterName);
       setUserID(receiveUserID);
-      setAccessToken((query.accessToken as string) ?? '');
+      //   setAccessToken((query.accessToken as string) ?? '');
     } catch (err) {
       console.error(err);
       if (params.userID !== undefined) {
@@ -62,7 +62,7 @@ const MessageWriteBlock: React.FC = () => {
     if (loading) return;
     const { messageTitle, messageNickname, messageTextview } = e.currentTarget;
     const data = {
-      accessToken: accessToken,
+      //   accessToken: accessToken,
       userID: userID,
       senderNickname: messageNickname.value,
       messageTitle: messageTitle.value,

@@ -121,7 +121,6 @@ const LoginPage: React.FC = () => {
     },
   });
 
-  const URL = process.env.REACT_APP_REGISTER_URL;
   const onLogin: React.FormEventHandler<HTMLFormElement> = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const { inputId, inputPassword } = e.currentTarget;
@@ -202,9 +201,9 @@ const LoginPage: React.FC = () => {
           </CustomForm>
         </animated.div>
         <div className="login-addtional">
-          <a href={URL}>
-            <button className="login-additional-btn">회원가입</button>
-          </a>
+          <button className="login-additional-btn" onClick={() => navigate('/register')}>
+            회원가입
+          </button>
           <button className="login-additional-btn" onClick={() => setSmShow(true)}>
             비밀번호를 잊으셨나요?
           </button>

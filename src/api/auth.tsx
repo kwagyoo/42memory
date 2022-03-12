@@ -14,7 +14,7 @@ export const fetch42 = async (code: string, type: string): Promise<resData> => {
 
 export const signUp = async (data: signUpData): Promise<void> =>
   await client.post('/user', {
-    accessToken: data.accessToken,
+    // accessToken: data.accessToken,
     userClusterName: data.userClusterName,
     userPassword: data.userPassword,
     userDeadline: data.userDeadline,

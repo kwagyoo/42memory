@@ -1,14 +1,12 @@
-import QueryString from 'qs';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
 import { Formik } from 'formik';
 import styled from 'styled-components';
-import { fetch42, signUp } from '../api/auth';
+import { signUp } from '../api/auth';
 import image42 from '../image/42memory_title.png';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
 import { ErrorContext } from '../module/ErrorContext';
-import axios from 'axios';
 import LoadingModal from '../common/LoadingModal';
 
 const StyledRegister = styled.div`
@@ -111,14 +109,14 @@ const StyledForm = styled(Form)`
 `;
 
 interface userProps {
-  userClusterName: string;
+  userClusterName?: string;
   userDeadline: string;
   userEmail?: string;
   userPassword?: string;
-  accessToken: string;
 }
 
 interface FormValues {
+  userClusterName: string;
   userEmail: string;
   userPassword: string;
   userPasswordConfirm: string;
@@ -127,11 +125,10 @@ interface FormValues {
 const RegisterBlock: React.VFC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<userProps>({
-    userClusterName: '로딩 중..',
+    userClusterName: '',
     userDeadline: '',
     userEmail: '',
     userPassword: '',
-    accessToken: '',
   });
   const { setError, setErrorText } = useContext(ErrorContext);
   const [completed, setCompleted] = useState(false);
@@ -155,39 +152,43 @@ const RegisterBlock: React.VFC = () => {
     [loading],
   );
 
-  const getUser = useCallback(async (): Promise<void> => {
-    try {
-      const query = QueryString.parse(location.search, {
-        ignoreQueryPrefix: true,
-      });
-      const res = await fetch42(query.code as string, 'register');
-      const began = new Date(res.data.cursus_users[1].begin_at);
-      const blackholed = new Date(res.data.cursus_users[1].blackholed_at);
-      const expired = new Date(began.getFullYear() + 2, began.getMonth(), began.getDate() - 1);
-      const finalDate = blackholed < expired ? blackholed : expired;
-      const restDay = (finalDate.getTime() - Date.now()) / (1000 * 3600 * 24);
-      if (restDay < 0 || restDay > 31) throw new Error('UnavailableDate');
-      setUser({
-        userClusterName: res.data.login,
-        userDeadline: finalDate.toISOString().split('T')[0],
-        accessToken: res.accessToken,
-      });
-    } catch (e: unknown) {
-      console.log(e);
-      if (axios.isAxiosError(e)) {
-        alert('유저 정보를 가져올 수 없습니다.');
-      } else {
-        alert('블랙홀로 빠져들기 1달(31일) 전부터 링크 생성이 가능합니다.');
-      }
-      navigate('/');
-    }
-  }, []);
+  //    42API 만료로 인해 기능 사용 정지
+  //
+  //   const getUser = useCallback(async (): Promise<void> => {
+  //     try {
+  //       const query = QueryString.parse(location.search, {
+  //         ignoreQueryPrefix: true,
+  //       });
+  //       const res = await fetch42(query.code as string, 'register');
+  //       const began = new Date(res.data.cursus_users[1].begin_at);
+  //       const blackholed = new Date(res.data.cursus_users[1].blackholed_at);
+  //       const expired = new Date(began.getFullYear() + 2, began.getMonth(), began.getDate() - 1);
+  //       const finalDate = blackholed < expired ? blackholed : expired;
+  //       const restDay = (finalDate.getTime() - Date.now()) / (1000 * 3600 * 24);
+  //       if (restDay < 0 || restDay > 31) throw new Error('UnavailableDate');
+  //       setUser({
+  //         userClusterName: res.data.login,
+  //         userDeadline: finalDate.toISOString().split('T')[0],
+  //         accessToken: res.accessToken,
+  //       });
+  //     } catch (e: unknown) {
+  //       console.log(e);
+  //       if (axios.isAxiosError(e)) {
+  //         alert('유저 정보를 가져올 수 없습니다.');
+  //       } else {
+  //         alert('블랙홀로 빠져들기 1달(31일) 전부터 링크 생성이 가능합니다.');
+  //       }
+  //       navigate('/');
+  //     }
+  //   }, []);
 
   useEffect(() => {
-    void getUser();
+    const today = new Date();
+    const expired = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
+    setUser({ userDeadline: expired.toISOString().split('T')[0] });
   }, []);
 
-  const initialValues: FormValues = { userEmail: '', userPassword: '', userPasswordConfirm: '' };
+  const initialValues: FormValues = { userClusterName: '', userEmail: '', userPassword: '', userPasswordConfirm: '' };
 
   const SignupSchema = Yup.object().shape({
     userEmail: Yup.string().email('Invalid email').required('Required'),
@@ -219,7 +220,16 @@ const RegisterBlock: React.VFC = () => {
           {({ touched, values, handleChange, handleBlur, handleSubmit, errors }) => (
             <StyledForm onSubmit={handleSubmit}>
               <FloatingLabel label="username">
-                <Form.Control type="text" placeholder="ClusterName" value={user.userClusterName} disabled />
+                <Form.Control
+                  type="text"
+                  name="userClusterName"
+                  id="inputClusterName"
+                  placeholder="ClusterName"
+                  value={values.userClusterName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
               </FloatingLabel>
               <FloatingLabel label="email">
                 <Form.Control
