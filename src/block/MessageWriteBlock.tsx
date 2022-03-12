@@ -16,7 +16,7 @@ const StyledForm = styled(Form)`
   .textblock {
     margin-top: 10px;
     width: 100%;
-    height: 500px;
+    height: 440px;
     resize: none;
   }
 `;
