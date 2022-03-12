@@ -33,7 +33,7 @@ interface MessageCount {
 export const sendMessage = async (data: SendMessageData): Promise<number> => {
   if (data.userID !== undefined) {
     const res: AxiosResponse<MessageCount> = await client.post(`/user/${data.userID}/message`, {
-      accessToken: data.accessToken,
+      //   accessToken: data.accessToken,
       senderNickname: data.senderNickname,
       messageTitle: data.messageTitle,
       messageText: data.messageText,
