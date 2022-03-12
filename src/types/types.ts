@@ -46,6 +46,7 @@ export interface SendMessageData {
   senderNickname: string;
   messageTitle: string;
   messageText: string;
+  clusterName: string;
 }
 
 export interface MessageProps {

@@ -60,13 +60,14 @@ const MessageWriteBlock: React.FC = () => {
   const onSendMessage = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (loading) return;
-    const { messageTitle, messageNickname, messageTextview } = e.currentTarget;
+    const { messageTitle, messageNickname, messageTextview, clusterName } = e.currentTarget;
     const data = {
       //   accessToken: accessToken,
       userID: userID,
       senderNickname: messageNickname.value,
       messageTitle: messageTitle.value,
       messageText: messageTextview.value,
+      clusterName: clusterName.value,
     };
     try {
       setLoading(true);
@@ -103,6 +104,12 @@ const MessageWriteBlock: React.FC = () => {
           </Form.Label>
           <Col sm="10">
             <Form.Control name="messageNickname" placeholder="닉네임을 작성해주세요(10자 이내)" maxLength={10} />
+          </Col>
+          <Form.Label column sm="2">
+            클러스터아이디
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control name="clusterName" placeholder="클러스터 아이디를 입력해주세요" maxLength={10} />
           </Col>
         </Form.Group>
         <Form.Control

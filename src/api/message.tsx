@@ -37,6 +37,7 @@ export const sendMessage = async (data: SendMessageData): Promise<number> => {
       senderNickname: data.senderNickname,
       messageTitle: data.messageTitle,
       messageText: data.messageText,
+      clusterName: data.clusterName,
     });
     return res.data.sendMessageCount;
   }
