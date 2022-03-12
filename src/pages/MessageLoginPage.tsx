@@ -36,7 +36,7 @@ const MessageLoginPage: React.FC = () => {
           <Image src={image42} />
         </div>
         {userName !== null && userName.length > 0 ? (
-          <Button variant="secondary" className="login" size="lg" onClick={() => navigate(`message/${userID}/write`)}>
+          <Button variant="secondary" className="login" size="lg" onClick={() => navigate(`/message/${userID}/write`)}>
             {userName} 님에게 글 남기러 가기{' '}
           </Button>
         ) : (
