@@ -87,8 +87,13 @@ const MainPage: React.FC = () => {
       if (simpleMessages === null || messages === null) {
         void getMessages();
       } else {
-        setMessageData(JSON.parse(messages));
-        setMessageFiles(JSON.parse(simpleMessages));
+        try {
+          setMessageData(JSON.parse(messages));
+          setMessageFiles(JSON.parse(simpleMessages));
+        } catch (err) {
+          console.error(err);
+          void getMessages();
+        }
       }
     } else {
       alert('로그인이 되어있지 않습니다. 메인 페이지로 이동합니다.');

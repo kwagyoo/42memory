@@ -83,7 +83,7 @@ const MessageWriteBlock: React.FC = () => {
   };
 
   return (
-    <DraggableWindow title="Send a message" width={900} height={700} onHeaderButtonClick={() => console.log('hello')}>
+    <DraggableWindow title="Send a message" width={900} height={700} onHeaderButtonClick={() => {}}>
       <StyledForm id="send-message" onSubmit={onSendMessage}>
         {loading && <LoadingModal completed={completed} />}
         <Form.Group as={Row} className="mb-3">

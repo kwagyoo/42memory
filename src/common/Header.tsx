@@ -141,8 +141,8 @@ const Header: React.FC = () => {
             <>
               <Dropdown.Item>
                 <CopyToClipboard
-                  text={`http://${import.meta.env.VITE_HOME ?? ''}/message/${sessionStorage.getItem('userID') ?? ''}`}
-                  onCopy={() => console.log('copy')}
+                  text={`https://${import.meta.env.VITE_HOME ?? ''}/message/${sessionStorage.getItem('userID') ?? ''}`}
+                  onCopy={() => {}}
                 >
                   <button>URL 복사하기</button>
                 </CopyToClipboard>
@@ -156,7 +156,7 @@ const Header: React.FC = () => {
         {login && (
           <>
             <CopyToClipboard
-              text={`http://${import.meta.env.VITE_HOME ?? ''}/message/${sessionStorage.getItem('userID') ?? ''}`}
+              text={`https://${import.meta.env.VITE_HOME ?? ''}/message/${sessionStorage.getItem('userID') ?? ''}`}
               onCopy={() => {
                 setShow(true);
                 setTimeout(() => setShow(false), 1000);
@@ -164,7 +164,7 @@ const Header: React.FC = () => {
             >
               <button ref={target} className="clipboard-btn">
                 <img src={copyImg} />
-                http://{import.meta.env.VITE_HOME ?? ''}/message/{sessionStorage.getItem('userID')}
+                https://{import.meta.env.VITE_HOME ?? ''}/message/{sessionStorage.getItem('userID')}
               </button>
             </CopyToClipboard>
             <Overlay target={target.current} show={show} placement="bottom">

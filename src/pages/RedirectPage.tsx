@@ -22,7 +22,8 @@ const RedirectPage: React.FC = () => {
           alert('본인의 계정에 메세지를 남길 수 없습니다');
           navigate('/');
         } else {
-          navigate(`/message/${userID}/write?accessToken=${res.accessToken}`);
+          sessionStorage.setItem('accessToken', res.accessToken);
+          navigate(`/message/${userID}/write`);
         }
       } catch (err) {
         console.error(err);
@@ -35,7 +36,7 @@ const RedirectPage: React.FC = () => {
 
   useEffect(() => {
     void checkUserName();
-  });
+  }, []);
   return (
     <div>
       <LoadingModal completed={completed} />

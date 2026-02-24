@@ -26,12 +26,12 @@ export interface signInFetch {
 export interface DirectoryProps {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   messageFiles: SimpleMessageData[];
-  windowData: Number[];
-  setWindowData: React.Dispatch<React.SetStateAction<Number[]>>;
+  windowData: number[];
+  setWindowData: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 export interface SimpleMessageData {
-  messageID: Number;
+  messageID: number;
   senderNickname: string;
 }
 
@@ -53,7 +53,7 @@ export interface MessageProps {
   data: MessageData | null;
   clickedWindow?: string;
   setClickedWindow?: React.Dispatch<React.SetStateAction<string>> | undefined;
-  deleteFromClickedMessages: (e: Number) => void;
+  deleteFromClickedMessages: (e: number) => void;
 }
 
 export interface DraggableWindowProps {

@@ -160,7 +160,7 @@ const LoginPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem('userID') !== undefined) {
+    if (sessionStorage.getItem('userID') !== null) {
       sessionStorage.clear();
       setLogin(false);
     }
