@@ -22,7 +22,6 @@
     "types": ["vite/client"]
   },
   "include": [
-    "src",
-    ".eslintrc.js"
+    "src"
   ]
 }
