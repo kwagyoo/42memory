@@ -106,3 +106,4 @@ build/
 
 # OMC (oh-my-claudecode)
 .omc/
+.DS_Store
