@@ -110,16 +110,12 @@ const DraggableWindow: React.FC<DraggableWindowProps> = ({
       };
 
       refDiv.addEventListener('mousemove', moveDrag);
-      document.addEventListener('mousemove', moveDrag); // 빠르게 마우스를 이동하면 refDiv의 영역에서 나가서 이벤트가 발생을 안함.
-      document.addEventListener(
-        'mouseup',
-        () => {
-          document.removeEventListener('mousemove', moveDrag);
-          refDiv.removeEventListener('mousemove', moveDrag);
-        },
-        { once: true },
-      );
-      refDiv.addEventListener('mouseup', () => refDiv.removeEventListener('mousemove', moveDrag));
+      document.addEventListener('mousemove', moveDrag);
+      const cleanup = () => {
+        document.removeEventListener('mousemove', moveDrag);
+        refDiv.removeEventListener('mousemove', moveDrag);
+      };
+      document.addEventListener('mouseup', cleanup, { once: true });
     }
   }, []);
 

@@ -1,7 +1,7 @@
 import MessageWriteBlock from '../block/MessageWriteBlock';
 import CautionWindow from '../common/CautionWindow';
 
-const WritePage: React.VFC = () => {
+const WritePage: React.FC = () => {
   return (
     <div>
       <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
