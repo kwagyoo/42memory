@@ -122,7 +122,7 @@ interface FormValues {
   userPasswordConfirm: string;
 }
 
-const RegisterBlock: React.VFC = () => {
+const RegisterBlock: React.FC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<userProps>({
     userClusterName: '',

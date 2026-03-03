@@ -43,7 +43,7 @@ const GuideDiv = styled.div`
     transform: translate(-50%, -50%);
   }
 `;
-const App: React.VFC = () => {
+const App: React.FC = () => {
   const isPcW = useMediaQuery({
     query: '(min-width : 1280px)',
   });

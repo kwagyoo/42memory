@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const HeaderWatchBlock: React.VFC = () => {
+const HeaderWatchBlock: React.FC = () => {
   const [nowTime, setNowTime] = useState('');
 
   useEffect(() => {
