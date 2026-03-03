@@ -122,7 +122,7 @@ const DirectoryBlock: React.FC<DirectoryProps> = ({ setVisible, messageFiles, wi
               {messageFiles.map((file: SimpleMessageData, index: number) => (
                 <Col lg="auto" key={index}>
                   <div className="file-page">
-                    <button className="file" onClick={onMessage} data-id={file.messageID}>
+                    <button className="file" onMouseDown={(e) => e.currentTarget.focus()} onClick={onMessage} data-id={file.messageID}>
                       <img src={fileimg} alt="file" />
                       <div className="file-name">{file.senderNickname.length >= 5 ? `${file.senderNickname.slice(0, 4)}...` : file.senderNickname}</div>
                     </button>
