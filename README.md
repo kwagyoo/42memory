@@ -93,9 +93,9 @@ macOS 데스크톱 UI를 모티브로 한 인터페이스에서 메시지를 폴
 
 | 구분 | 기술 |
 |------|------|
-| Framework | React 17 + TypeScript |
+| Framework | React 18 + TypeScript |
 | Styling | styled-components 5, React Bootstrap 2 |
-| Routing | React Router v6 |
+| Routing | React Router v7 |
 | Animation | react-spring 9, react-draggable 4 |
 | HTTP Client | Axios |
 | Form | Formik 2 + Yup |

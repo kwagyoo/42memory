@@ -10,7 +10,7 @@ export const LoginContext = createContext<LoginContextProps>({
   setLogin: () => {},
 });
 
-const LoginContextProvider: React.FC<React.ReactNode> = ({ children }) => {
+const LoginContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [login, setLogin] = useState(() => sessionStorage.getItem('accessToken') !== null);
 
   const value = useMemo(() => ({ login, setLogin }), [login, setLogin]);
