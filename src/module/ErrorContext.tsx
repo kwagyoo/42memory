@@ -14,7 +14,7 @@ export const ErrorContext = createContext<ErrorContextProps>({
   setErrorText: () => {},
 });
 
-const ErrorContextProvider: React.FC<React.ReactNode> = ({ children }) => {
+const ErrorContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
